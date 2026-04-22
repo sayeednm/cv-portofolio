@@ -254,11 +254,46 @@ function closeLightbox() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeProjectModal(); closeVideoModal(); } });
 
 // ===== CONTACT FORM =====
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
   const t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
-  btn.textContent = currentLang === 'id' ? 'Pesan Terkirim!' : 'Message Sent!';
-  btn.style.background = '#10b981';
-  setTimeout(() => { btn.innerHTML = t['contact.form.send']; btn.style.background = ''; e.target.reset(); }, 3000);
+
+  btn.textContent = currentLang === 'id' ? 'Mengirim...' : 'Sending...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (json.success) {
+      btn.textContent = currentLang === 'id' ? '✓ Pesan Terkirim!' : '✓ Message Sent!';
+      btn.style.background = '#10b981';
+      btn.style.opacity = '1';
+      e.target.reset();
+      setTimeout(() => {
+        btn.innerHTML = t['contact.form.send'];
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 3000);
+    } else {
+      throw new Error('Failed');
+    }
+  } catch {
+    btn.textContent = currentLang === 'id' ? '✗ Gagal, coba lagi' : '✗ Failed, try again';
+    btn.style.background = '#ef4444';
+    btn.style.opacity = '1';
+    setTimeout(() => {
+      btn.innerHTML = t['contact.form.send'];
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }
 }

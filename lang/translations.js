@@ -2,7 +2,7 @@ const TRANSLATIONS = {
   en: {
     "nav.about": "About", "nav.education": "Education", "nav.experience": "Experience",
     "nav.projects": "Projects", "nav.design": "Design", "nav.skills": "Skills", "nav.contact": "Contact",
-    "hero.tag": "👋 Welcome to my portfolio",
+    "hero.tag": "Welcome to my portfolio",
     "hero.desc": "Transforming complex data into intelligent solutions and stunning visual experiences.",
     "hero.cta1": "View Projects", "hero.cta2": "Get In Touch",
     "hero.stat1": "Years Design", "hero.stat2": "Projects Built", "hero.stat3": "Specialized",
@@ -69,7 +69,7 @@ const TRANSLATIONS = {
   id: {
     "nav.about": "Tentang", "nav.education": "Pendidikan", "nav.experience": "Pengalaman",
     "nav.projects": "Proyek", "nav.design": "Desain", "nav.skills": "Keahlian", "nav.contact": "Kontak",
-    "hero.tag": "👋 Selamat datang di portofolio saya",
+    "hero.tag": "Selamat datang di portofolio saya",
     "hero.desc": "Mengubah data kompleks menjadi solusi cerdas dan pengalaman visual yang memukau.",
     "hero.cta1": "Lihat Proyek", "hero.cta2": "Hubungi Saya",
     "hero.stat1": "Tahun Desain", "hero.stat2": "Proyek Selesai", "hero.stat3": "Spesialisasi",

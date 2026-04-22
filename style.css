@@ -599,7 +599,7 @@ img { max-width: 100%; height: auto; }
 .hobby-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-bright); margin-bottom: 10px; }
 .hobby-card p { font-size: 0.88rem; color: var(--text-light); line-height: 1.7; }
 
-@media (max-width: 1024px) { .hobbies-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 1024px) { .hobbies-grid { grid-template-columns: 1fr; } }
 @media (max-width: 480px) { .hobbies-grid { grid-template-columns: 1fr; } }
 
 /* ===== MOBILE ANIMATION FIX ===== */
@@ -680,6 +680,6 @@ img { max-width: 100%; height: auto; }
 }
 @media (max-width: 480px) {
   .design-grid { grid-template-columns: 1fr; }
-  .hobbies-grid { grid-template-columns: 1fr 1fr; }
+  .hobbies-grid { grid-template-columns: 1fr; }
   .skillbars-grid { grid-template-columns: 1fr; }
 }
