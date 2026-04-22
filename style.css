@@ -169,18 +169,15 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .reveal {
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+  transition: opacity 0.75s cubic-bezier(0.4,0,0.2,1), transform 0.75s cubic-bezier(0.4,0,0.2,1);
 }
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal.slide-left { transform: translateX(-40px); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.slide-left { transform: translateX(-50px) translateY(0); }
 .reveal.slide-left.visible { transform: translateX(0); }
-.reveal.slide-right { transform: translateX(40px); }
+.reveal.slide-right { transform: translateX(50px) translateY(0); }
 .reveal.slide-right.visible { transform: translateX(0); }
-.reveal.zoom { transform: scale(0.9); }
-.reveal.zoom.visible { transform: scale(1); }
+.reveal.zoom { transform: scale(0.88) translateY(20px); }
+.reveal.zoom.visible { transform: scale(1) translateY(0); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
@@ -615,3 +612,11 @@ img { max-width: 100%; height: auto; }
   /* reduce animation distance */
   .reveal { transform: translateY(24px); }
 }
+
+/* ===== PROJECT REAL IMAGE ===== */
+.project-real-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.project-card:hover .project-real-img { transform: scale(1.05); }
