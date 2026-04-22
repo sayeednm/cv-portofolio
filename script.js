@@ -25,7 +25,7 @@ function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   particles.forEach(p => {
     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0,212,255,${p.alpha})`; ctx.fill();
+    ctx.fillStyle = `rgba(0,180,216,${p.alpha})`; ctx.fill();
     p.x += p.dx; p.y += p.dy;
     if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
     if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
@@ -35,7 +35,7 @@ function drawParticles() {
       const d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
       if (d < 100) {
         ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0,212,255,${0.08 * (1 - d / 100)})`; ctx.lineWidth = 0.5; ctx.stroke();
+        ctx.strokeStyle = `rgba(0,180,216,${0.06 * (1 - d / 100)})`; ctx.lineWidth = 0.5; ctx.stroke();
       }
     }
   requestAnimationFrame(drawParticles);
@@ -53,15 +53,20 @@ if (subtitleEl) {
   const cursor = document.createElement('span');
   cursor.className = 'typed-cursor';
   subtitleEl.after(cursor);
+  subtitleEl.textContent = '';
   function type() {
     const words = wordSets[currentLang] || wordSets.en;
     const word = words[wi % words.length];
-    subtitleEl.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ci++);
-    if (!deleting && ci > word.length) { deleting = true; setTimeout(type, 1800); return; }
-    if (deleting && ci < 0) { deleting = false; wi = (wi + 1) % words.length; ci = 0; }
-    setTimeout(type, deleting ? 60 : 100);
+    if (!deleting) {
+      subtitleEl.textContent = word.slice(0, ++ci);
+      if (ci >= word.length) { deleting = true; setTimeout(type, 1800); return; }
+    } else {
+      subtitleEl.textContent = word.slice(0, --ci);
+      if (ci <= 0) { deleting = false; wi = (wi + 1) % words.length; }
+    }
+    setTimeout(type, deleting ? 55 : 95);
   }
-  type();
+  setTimeout(type, 300);
 }
 
 // ===== COUNTER ANIMATION =====
@@ -148,6 +153,20 @@ window.addEventListener('load', () => {
 setTimeout(() => {
   document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
 }, 1000);
+// ===== SKILL BARS =====
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.skillbar-fill').forEach(bar => {
+        bar.style.width = bar.getAttribute('data-width') + '%';
+      });
+      skillObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+const skillSection = document.querySelector('.skillbars-section');
+if (skillSection) skillObs.observe(skillSection);
+
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
   navbar.style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(0,0,0,0.08)' : 'none';
