@@ -178,7 +178,6 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .reveal.slide-right.visible { transform: translateX(0); }
 .reveal.zoom { transform: scale(0.88) translateY(20px); }
 .reveal.zoom.visible { transform: scale(1) translateY(0); }
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .hero { flex-direction: column; padding: 120px 24px 80px; text-align: center; }
