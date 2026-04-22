@@ -132,18 +132,18 @@ document.getElementById('langToggle').addEventListener('click', () => {
 const revealObs = new IntersectionObserver((entries, obs) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      setTimeout(() => e.target.classList.add('visible'), i * 100);
       obs.unobserve(e.target);
     }
   });
-}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-// Force-show elements already in viewport on load
+// show elements already in viewport on load
 window.addEventListener('load', () => {
   document.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight) {
+    if (rect.top < window.innerHeight - 60) {
       setTimeout(() => el.classList.add('visible'), i * 80);
     }
   });
