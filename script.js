@@ -213,6 +213,18 @@ function closeProjectModal() {
 }
 document.getElementById('projModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeProjectModal(); });
 
+// ===== VIDEO MODAL =====
+function openVideoModal(url) {
+  document.getElementById('videoFrame').src = url + '?autoplay=1';
+  document.getElementById('videoModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  document.getElementById('videoFrame').src = '';
+  document.getElementById('videoModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 // ===== DESIGN FILTER =====
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -235,7 +247,7 @@ function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeProjectModal(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeProjectModal(); closeVideoModal(); } });
 
 // ===== CONTACT FORM =====
 function handleSubmit(e) {

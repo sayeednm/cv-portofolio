@@ -620,3 +620,41 @@ img { max-width: 100%; height: auto; }
   transition: transform 0.4s ease;
 }
 .project-card:hover .project-real-img { transform: scale(1.05); }
+
+/* ===== VIDEO CARD ===== */
+.video-thumb { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+.design-card:hover .video-thumb { transform: scale(1.05); }
+.video-play-btn {
+  width: 56px !important; height: 56px !important;
+  background: #FF0000 !important; border-radius: 50% !important;
+  font-size: 1.2rem !important;
+}
+.video-badge {
+  position: absolute; bottom: 10px; left: 10px;
+  background: rgba(0,0,0,0.7); color: white;
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 0.72rem; font-weight: 700;
+  display: flex; align-items: center; gap: 5px;
+}
+.video-badge i { color: #FF0000; }
+
+/* ===== VIDEO MODAL ===== */
+.video-modal {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+}
+.video-modal.open { display: flex; }
+.video-modal-inner {
+  position: relative; width: 90vw; max-width: 900px;
+  aspect-ratio: 16/9; border-radius: 12px; overflow: hidden;
+}
+.video-modal-inner iframe { width: 100%; height: 100%; border: none; }
+.video-modal-close {
+  position: absolute; top: -44px; right: 0;
+  background: rgba(255,255,255,0.1); border: none;
+  color: white; font-size: 1.2rem; width: 36px; height: 36px;
+  border-radius: 8px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: background var(--transition);
+}
+.video-modal-close:hover { background: #ef4444; }
