@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+  <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- NAV -->
   <nav class="navbar">
@@ -20,7 +21,6 @@
       <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
       <li><a href="#design" data-i18n="nav.design">Design</a></li>
       <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
-      <li><a href="#github" data-i18n="nav.github">GitHub</a></li>
       <li><a href="#contact" class="btn-nav" data-i18n="nav.contact">Contact</a></li>
     </ul>
     <button class="lang-toggle" id="langToggle" aria-label="Toggle language">
@@ -34,6 +34,7 @@
 
   <!-- HERO -->
   <section class="hero" id="home">
+    <canvas id="particles" class="particles-canvas"></canvas>
     <div class="hero-left reveal">
       <div class="hero-photo-wrapper">
         <div class="hero-photo-placeholder">
@@ -63,6 +64,8 @@
 
   <!-- ABOUT -->
   <section class="about section-pad" id="about">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
     <div class="container">
       <div class="about-grid">
         <div class="about-photo reveal">
@@ -102,7 +105,9 @@
           <div class="timeline-dot"></div>
           <div class="timeline-date">2025 – Present</div>
           <div class="timeline-card">
-            <div class="timeline-icon"><i class="fa-solid fa-brain"></i></div>
+            <div class="timeline-icon timeline-logo">
+              <img src="images/logo-elfan.png" alt="Elfan AI Academy & UICI" />
+            </div>
             <div class="timeline-body">
               <h3>Elfan AI Academy &amp; UICI</h3>
               <p class="timeline-degree" data-i18n="edu.1.degree">Graphic Design · Multi Media Broadcasting · Programming · Informatics Engineering (UICI)</p>
@@ -116,7 +121,9 @@
           <div class="timeline-dot"></div>
           <div class="timeline-date">2022 – 2025</div>
           <div class="timeline-card">
-            <div class="timeline-icon"><i class="fa-solid fa-school"></i></div>
+            <div class="timeline-icon timeline-logo">
+              <img src="images/logo-sma.png" alt="SMA Muhammadiyah 3 Tulangan" />
+            </div>
             <div class="timeline-body">
               <h3>SMA Muhammadiyah 3 Tulangan</h3>
               <p class="timeline-degree" data-i18n="edu.2.degree">Boarding School · Senior High School</p>
@@ -129,7 +136,9 @@
           <div class="timeline-dot"></div>
           <div class="timeline-date">2019 – 2022</div>
           <div class="timeline-card">
-            <div class="timeline-icon"><i class="fa-solid fa-book-open"></i></div>
+            <div class="timeline-icon timeline-logo">
+              <img src="images/logo-smp.png" alt="SMP Muhammadiyah 5 Tulangan" />
+            </div>
             <div class="timeline-body">
               <h3>SMP Muhammadiyah 5 Tulangan</h3>
               <p class="timeline-degree" data-i18n="edu.3.degree">Boarding School · Junior High School</p>
@@ -435,36 +444,6 @@
     </div>
   </section>
 
-  <!-- GITHUB ACTIVITY -->
-  <section class="github-section section-pad grey-bg" id="github">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-tag" data-i18n="github.tag">Open Source</p>
-        <h2 class="section-title" data-i18n="github.title">GitHub <span class="accent">Activity</span></h2>
-      </div>
-      <div class="github-card reveal">
-        <div class="github-profile">
-          <img src="https://github.com/sayeednm.png" alt="GitHub Avatar" class="github-avatar" />
-          <div>
-            <p class="github-name">sayeednm</p>
-            <a href="https://github.com/sayeednm" target="_blank" rel="noopener" class="github-link">github.com/sayeednm <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-          </div>
-        </div>
-        <div class="github-graph-wrap">
-          <img
-            src="https://ghchart.rshah.org/00D4FF/sayeednm"
-            alt="GitHub Contribution Chart"
-            class="github-graph"
-            onerror="this.parentElement.innerHTML='<p class=\'graph-error\'>Could not load contribution graph.</p>'"
-          />
-        </div>
-        <div class="github-stats">
-          <img src="https://github-readme-stats.vercel.app/api?username=sayeednm&show_icons=true&theme=transparent&title_color=00D4FF&icon_color=00D4FF&text_color=374151&border_color=E5E7EB&hide_title=false" alt="GitHub Stats" class="github-stats-img" />
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- CONTACT -->
   <section class="contact section-pad grey-bg" id="contact">
     <div class="container">
@@ -478,7 +457,7 @@
           <div class="contact-item"><i class="fa-solid fa-envelope accent"></i><span>nmsayyid@gmail.com</span></div>
           <div class="contact-item"><i class="fa-solid fa-location-dot accent"></i><span data-i18n="contact.location">Sidoarjo, East Java, Indonesia</span></div>
           <div class="social-links">
-            <a href="https://linkedin.com/in/sayyid-naabih-musyaffa" target="_blank" rel="noopener" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://linkedin.com/in/sayyid-naabih-m" target="_blank" rel="noopener" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
             <a href="https://github.com/sayeednm" target="_blank" rel="noopener" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
             <a href="https://instagram.com/syeednm_" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
           </div>

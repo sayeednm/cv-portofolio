@@ -387,3 +387,136 @@ body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--
 .graph-error { color: var(--text-light); font-size: 0.85rem; text-align: center; padding: 20px; }
 .github-stats { display: flex; justify-content: center; }
 .github-stats-img { max-width: 480px; width: 100%; height: auto; border-radius: 10px; }
+
+/* ===== CURSOR GLOW ===== */
+.cursor-glow {
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+  position: fixed; pointer-events: none; z-index: 0;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+
+/* ===== PARTICLES CANVAS ===== */
+.particles-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+.hero { position: relative; overflow: hidden; }
+.hero-left, .hero-right { position: relative; z-index: 1; }
+
+/* ===== BLOBS ===== */
+.about { position: relative; overflow: hidden; }
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none; z-index: 0;
+  animation: blobFloat 8s ease-in-out infinite;
+}
+.blob-1 {
+  width: 400px; height: 400px;
+  background: rgba(0,212,255,0.06);
+  top: -100px; right: -100px;
+}
+.blob-2 {
+  width: 300px; height: 300px;
+  background: rgba(99,102,241,0.05);
+  bottom: -80px; left: -80px;
+  animation-delay: -4s;
+}
+.about .container { position: relative; z-index: 1; }
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.05); }
+}
+
+/* ===== HERO PHOTO GLOW RING ===== */
+.hero-photo-wrapper::after {
+  content: '';
+  position: absolute; inset: -12px;
+  border-radius: 28px;
+  background: conic-gradient(from 0deg, var(--cyan), transparent, var(--cyan));
+  z-index: -1; opacity: 0.3;
+  animation: spinRing 6s linear infinite;
+}
+@keyframes spinRing {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== TYPED CURSOR ===== */
+.typed-cursor {
+  display: inline-block; width: 3px; height: 1em;
+  background: var(--cyan); margin-left: 4px;
+  animation: blink 0.8s step-end infinite;
+  vertical-align: middle;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ===== CARD TILT (via JS) ===== */
+.exp-card, .project-card, .skill-category, .timeline-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ===== SECTION DIVIDER WAVE ===== */
+.wave-divider {
+  width: 100%; overflow: hidden; line-height: 0;
+  margin-bottom: -2px;
+}
+.wave-divider svg { display: block; width: 100%; }
+
+/* ===== COUNTER ANIMATION ===== */
+.stat-num { transition: none; }
+
+/* ===== SKILL BAR PULSE ===== */
+.skill-list li i {
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* ===== GLOWING ACCENT BUTTON ===== */
+.btn-primary {
+  position: relative; overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.btn-primary:hover::after { transform: translateX(100%); }
+
+/* ===== FLOATING BADGE ANIMATION ===== */
+.about-badge {
+  animation: floatBadge 3s ease-in-out infinite;
+}
+@keyframes floatBadge {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* ===== SECTION TAG GLOW ===== */
+.section-tag {
+  box-shadow: 0 0 20px rgba(0,212,255,0.15);
+}
+
+/* ===== NAVBAR ACTIVE GLOW ===== */
+.nav-links a.active-nav {
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0,212,255,0.4);
+}
+
+/* ===== TIMELINE LOGO ===== */
+.timeline-logo {
+  background: var(--white) !important;
+  border: 1.5px solid var(--border);
+  padding: 4px;
+}
+.timeline-logo img {
+  width: 100%; height: 100%;
+  object-fit: contain; border-radius: 8px;
+}

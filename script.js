@@ -1,3 +1,123 @@
+// ===== CURSOR GLOW =====
+const cursorGlow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  cursorGlow.style.left = e.clientX + 'px';
+  cursorGlow.style.top = e.clientY + 'px';
+});
+
+// ===== PARTICLES =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function createParticle() {
+  return {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 0.5,
+    dx: (Math.random() - 0.5) * 0.4,
+    dy: (Math.random() - 0.5) * 0.4,
+    alpha: Math.random() * 0.5 + 0.1
+  };
+}
+for (let i = 0; i < 60; i++) particles.push(createParticle());
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,212,255,${p.alpha})`;
+    ctx.fill();
+    p.x += p.dx; p.y += p.dy;
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+  // draw connecting lines
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(0,212,255,${0.08 * (1 - dist / 100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ===== TYPED EFFECT =====
+const subtitleEl = document.querySelector('.hero-subtitle .accent');
+if (subtitleEl) {
+  const words = ['Graphic Designer', 'AI Engineer', 'Web Developer', 'Creative Innovator'];
+  let wi = 0, ci = 0, deleting = false;
+  const cursor = document.createElement('span');
+  cursor.className = 'typed-cursor';
+  subtitleEl.after(cursor);
+
+  function type() {
+    const word = words[wi];
+    subtitleEl.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ci++);
+    if (!deleting && ci > word.length) { deleting = true; setTimeout(type, 1800); return; }
+    if (deleting && ci < 0) { deleting = false; wi = (wi + 1) % words.length; ci = 0; }
+    setTimeout(type, deleting ? 60 : 100);
+  }
+  type();
+}
+
+// ===== COUNTER ANIMATION =====
+function animateCounter(el, target, suffix = '') {
+  let start = 0;
+  const duration = 1500;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const val = Math.floor(progress * target);
+    el.textContent = val + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  };
+  requestAnimationFrame(step);
+}
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const raw = el.textContent;
+      if (raw.includes('+')) animateCounter(el, parseInt(raw), '+');
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-num').forEach(el => {
+  if (el.textContent.includes('+')) counterObserver.observe(el);
+});
+
+// ===== CARD TILT =====
+document.querySelectorAll('.exp-card, .project-card, .skill-category').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
 // ===== TRANSLATIONS =====
 const translations = {
   en: {
