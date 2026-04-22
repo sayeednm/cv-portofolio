@@ -45,13 +45,17 @@ drawParticles();
 // ===== TYPED EFFECT =====
 const subtitleEl = document.querySelector('.hero-subtitle .accent');
 if (subtitleEl) {
-  const words = ['Graphic Designer', 'AI Engineer', 'Web Developer', 'Creative Innovator'];
+  const wordSets = {
+    en: ['Graphic Designer', 'AI Engineer', 'Web Developer', 'Creative Innovator'],
+    id: ['Desainer Grafis', 'AI Engineer', 'Web Developer', 'Inovator Kreatif']
+  };
   let wi = 0, ci = 0, deleting = false;
   const cursor = document.createElement('span');
   cursor.className = 'typed-cursor';
   subtitleEl.after(cursor);
   function type() {
-    const word = words[wi];
+    const words = wordSets[currentLang] || wordSets.en;
+    const word = words[wi % words.length];
     subtitleEl.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ci++);
     if (!deleting && ci > word.length) { deleting = true; setTimeout(type, 1800); return; }
     if (deleting && ci < 0) { deleting = false; wi = (wi + 1) % words.length; ci = 0; }
@@ -103,7 +107,9 @@ async function loadLang(lang) {
   }
   const t = translations[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const v = t[el.getAttribute('data-i18n')];
+    const key = el.getAttribute('data-i18n');
+    if (key === 'hero.subtitle') return; // handled by typed effect
+    const v = t[key];
     if (v !== undefined) el.innerHTML = v;
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
