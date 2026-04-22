@@ -102,13 +102,18 @@ let translations = {};
 
 async function loadLang(lang) {
   if (!translations[lang]) {
-    const res = await fetch(`lang/${lang}.json`);
-    translations[lang] = await res.json();
+    try {
+      const res = await fetch(`lang/${lang}.json`);
+      translations[lang] = await res.json();
+    } catch(e) {
+      console.warn('Lang file not found, using fallback');
+      translations[lang] = {};
+    }
   }
   const t = translations[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (key === 'hero.subtitle') return; // handled by typed effect
+    if (key === 'hero.subtitle') return;
     const v = t[key];
     if (v !== undefined) el.innerHTML = v;
   });
@@ -132,12 +137,28 @@ document.getElementById('langToggle').addEventListener('click', () => {
 // ===== SCROLL REVEAL =====
 const revealObs = new IntersectionObserver((entries, obs) => {
   entries.forEach((e, i) => {
-    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); }
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-// ===== NAVBAR =====
+// Force-show elements already in viewport on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    }
+  });
+});
+
+// Fallback: show all reveal elements after 1s regardless
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+}, 1000);
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
   navbar.style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(0,0,0,0.08)' : 'none';
