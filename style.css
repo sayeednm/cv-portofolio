@@ -7,22 +7,22 @@
   --accent-grad: linear-gradient(135deg, #10B981, #34D399);
   --accent-glow: rgba(16,185,129,0.15);
   --white: #FFFFFF;
-  --bg: #0C0F0E;
-  --bg-2: #111714;
-  --bg-card: #161C19;
-  --bg-card-2: #1A2320;
-  --text: #9CA3AF;
-  --text-light: #6B7280;
+  --bg: #111827;
+  --bg-2: #1F2937;
+  --bg-card: #1F2937;
+  --bg-card-2: #243040;
+  --text: #D1D5DB;
+  --text-light: #9CA3AF;
   --text-bright: #F9FAFB;
-  --border: rgba(255,255,255,0.06);
-  --border-accent: rgba(16,185,129,0.25);
-  --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --border: rgba(255,255,255,0.1);
+  --border-accent: rgba(16,185,129,0.3);
+  --card-shadow: 0 4px 24px rgba(0,0,0,0.3);
   --card-shadow-hover: 0 16px 48px rgba(16,185,129,0.15);
   --radius: 16px;
   --transition: 0.3s ease;
   --cyan: #10B981;
   --cyan-dark: #059669;
-  --border-cyan: rgba(16,185,129,0.25);
+  --border-cyan: rgba(16,185,129,0.3);
 }
 
 html { scroll-behavior: smooth; }
@@ -569,3 +569,25 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 img { max-width: 100%; height: auto; }
 .hero { max-width: 100vw; }
 .navbar { max-width: 100vw; }
+
+/* ===== HOBBIES ===== */
+.hobbies-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.hobby-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 32px 24px; border: 1px solid var(--border);
+  box-shadow: var(--card-shadow); text-align: center;
+  transition: all var(--transition);
+}
+.hobby-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-6px); border-color: var(--border-accent); }
+.hobby-icon {
+  width: 64px; height: 64px; border-radius: 18px;
+  background: rgba(16,185,129,0.1); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; margin: 0 auto 20px;
+  border: 1px solid var(--border-accent);
+}
+.hobby-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-bright); margin-bottom: 10px; }
+.hobby-card p { font-size: 0.88rem; color: var(--text-light); line-height: 1.7; }
+
+@media (max-width: 1024px) { .hobbies-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .hobbies-grid { grid-template-columns: 1fr; } }
