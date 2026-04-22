@@ -46,8 +46,8 @@ drawParticles();
 const subtitleEl = document.querySelector('.hero-subtitle .accent');
 if (subtitleEl) {
   const wordSets = {
-    en: ['Graphic Designer', 'AI Engineer', 'Web Developer', 'Creative Innovator'],
-    id: ['Desainer Grafis', 'AI Engineer', 'Web Developer', 'Inovator Kreatif']
+    en: ['AI Engineer & Graphic Designer', 'AI Engineer & Web Developer', 'AI Engineer & Creative Innovator'],
+    id: ['AI Engineer & Desainer Grafis', 'AI Engineer & Web Developer', 'AI Engineer & Inovator Kreatif']
   };
   let wi = 0, ci = 0, deleting = false;
   const cursor = document.createElement('span');
