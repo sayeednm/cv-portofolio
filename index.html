@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sayyid Naabih Musyaffa | AI Engineer & Graphic Designer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="nav-logo">SNM<span class="accent">.</span></div>
+    <ul class="nav-links">
+      <li><a href="#about" data-i18n="nav.about">About</a></li>
+      <li><a href="#education" data-i18n="nav.education">Education</a></li>
+      <li><a href="#experience" data-i18n="nav.experience">Experience</a></li>
+      <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+      <li><a href="#design" data-i18n="nav.design">Design</a></li>
+      <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
+      <li><a href="#contact" class="btn-nav" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <button class="lang-toggle" id="langToggle" aria-label="Toggle language">
+      <span class="lang-icon">🌐</span>
+      <span class="lang-label">ID</span>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-left reveal">
+      <div class="hero-photo-wrapper">
+        <div class="hero-photo-placeholder">
+          <i class="fa-solid fa-user"></i>
+          <span>Main Profile Photo</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right reveal">
+      <p class="hero-tag" data-i18n="hero.tag">👋 Welcome to my portfolio</p>
+      <h1 class="hero-title">Sayyid Naabih Musyaffa</h1>
+      <h2 class="hero-subtitle">AI Engineer &amp; <span class="accent" data-i18n="hero.subtitle">Graphic Designer</span></h2>
+      <p class="hero-desc" data-i18n="hero.desc">Transforming complex data into intelligent solutions and stunning visual experiences.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary" data-i18n="hero.cta1">View Projects</a>
+        <a href="#contact" class="btn-outline" data-i18n="hero.cta2">Get In Touch</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num accent">3+</span><span class="stat-label" data-i18n="hero.stat1">Years Design</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num accent">10+</span><span class="stat-label" data-i18n="hero.stat2">Projects Built</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num accent">AI</span><span class="stat-label" data-i18n="hero.stat3">Specialized</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about section-pad" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-photo reveal">
+          <div class="about-photo-placeholder">
+            <i class="fa-solid fa-user-tie"></i>
+            <span>Personal Photo</span>
+          </div>
+          <div class="about-badge"><i class="fa-solid fa-location-dot"></i> Sidoarjo, Indonesia</div>
+        </div>
+        <div class="about-content reveal">
+          <p class="section-tag" data-i18n="about.tag">About Me</p>
+          <h2 class="section-title" data-i18n="about.title">Tech meets <span class="accent">Creativity</span></h2>
+          <p class="about-text" data-i18n="about.p1">I am a tech-creative professional based in Sidoarjo. My core philosophy is rooted in lifelong learning; I am driven by a constant curiosity to master new technologies, from advanced AI frameworks to cinematic visual tools.</p>
+          <p class="about-text" data-i18n="about.p2">I strive to bridge the gap between technical functionality and aesthetic excellence — building solutions that are not only smart, but beautiful.</p>
+          <div class="about-tags">
+            <span class="tag">AI Engineering</span>
+            <span class="tag">Full-Stack Dev</span>
+            <span class="tag">UI/UX Design</span>
+            <span class="tag">Videography</span>
+            <span class="tag">Prompt Engineering</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="education section-pad grey-bg" id="education">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-tag" data-i18n="edu.tag">Academic Journey</p>
+        <h2 class="section-title" data-i18n="edu.title">Education <span class="accent">History</span></h2>
+      </div>
+      <div class="timeline">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2025 – Present</div>
+          <div class="timeline-card">
+            <div class="timeline-icon"><i class="fa-solid fa-brain"></i></div>
+            <div class="timeline-body">
+              <h3>Elfan AI Academy &amp; UICI</h3>
+              <p class="timeline-degree" data-i18n="edu.1.degree">Informatics Engineering · AI Specialization</p>
+              <p class="timeline-desc" data-i18n="edu.1.desc">Pursuing specialized education in Artificial Intelligence and Informatics, focusing on AI integration, machine learning, and modern software architecture.</p>
+              <span class="timeline-badge current" data-i18n="edu.current">Current</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2022 – 2025</div>
+          <div class="timeline-card">
+            <div class="timeline-icon"><i class="fa-solid fa-school"></i></div>
+            <div class="timeline-body">
+              <h3>SMA Muhammadiyah 3 Tulangan</h3>
+              <p class="timeline-degree" data-i18n="edu.2.degree">Boarding School · Science & Technology</p>
+              <p class="timeline-desc" data-i18n="edu.2.desc">A rigorous boarding school environment that fostered discipline, leadership, and a strong academic foundation in science and technology.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2019 – 2022</div>
+          <div class="timeline-card">
+            <div class="timeline-icon"><i class="fa-solid fa-book-open"></i></div>
+            <div class="timeline-body">
+              <h3>SMP Muhammadiyah 5 Tulangan</h3>
+              <p class="timeline-degree" data-i18n="edu.3.degree">Boarding School · Junior Secondary</p>
+              <p class="timeline-desc" data-i18n="edu.3.desc">Developed core analytical skills and a passion for technology within a structured, character-building boarding environment.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="experience section-pad" id="experience">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-tag" data-i18n="exp.tag">What I Do</p>
+        <h2 class="section-title" data-i18n="exp.title">Professional <span class="accent">Experience</span></h2>
+      </div>
+      <div class="exp-grid">
+
+        <div class="exp-card reveal">
+          <div class="exp-icon"><i class="fa-solid fa-palette"></i></div>
+          <h3 data-i18n="exp.1.title">Graphic Designer &amp; Videographer</h3>
+          <p class="exp-type" data-i18n="exp.1.type">Independent / Project-Based</p>
+          <p class="exp-desc" data-i18n="exp.1.desc">Creating premium visual identities, cinematic video content, and modern branding solutions for various clients. Specializing in brand storytelling through motion and design.</p>
+          <div class="exp-tools">
+            <span>Adobe Premiere</span><span>Illustrator</span><span>Photoshop</span><span>After Effects</span>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon"><i class="fa-solid fa-trophy"></i></div>
+          <h3 data-i18n="exp.4.title">Graphic Design Competition</h3>
+          <p class="exp-type" data-i18n="exp.4.type">Competitor · School Level</p>
+          <p class="exp-desc" data-i18n="exp.4.desc">Participated in graphic design competitions, creating original visual works under time constraints. Sharpened skills in concept development, typography, and visual communication.</p>
+          <div class="exp-tools">
+            <span>Illustrator</span><span>Photoshop</span><span>CorelDRAW</span><span>Typography</span>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon"><i class="fa-brands fa-instagram"></i></div>
+          <h3 data-i18n="exp.5.title">Head of Media Team</h3>
+          <p class="exp-type" data-i18n="exp.5.type">School Organization · SMA Muhammadiyah 3</p>
+          <p class="exp-desc" data-i18n="exp.5.desc">Led the school's media division, responsible for managing and curating the official Instagram feed. Oversaw content planning, visual consistency, and post scheduling to grow the school's digital presence.</p>
+          <div class="exp-tools">
+            <span>Content Planning</span><span>Instagram</span><span>Canva</span><span>Team Lead</span>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon"><i class="fa-solid fa-code"></i></div>
+          <h3 data-i18n="exp.2.title">Full-Stack Web Developer</h3>
+          <p class="exp-type" data-i18n="exp.2.type">Project-Based</p>
+          <p class="exp-desc" data-i18n="exp.2.desc">Designing and deploying responsive, high-performance web applications using Laravel, Tailwind, and Bootstrap. From database architecture to polished front-end interfaces.</p>
+          <div class="exp-tools">
+            <span>Laravel</span><span>Tailwind CSS</span><span>Bootstrap</span><span>JavaScript</span>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon"><i class="fa-solid fa-robot"></i></div>
+          <h3 data-i18n="exp.3.title">AI Engineer</h3>
+          <p class="exp-type" data-i18n="exp.3.type">Specialized / Academic</p>
+          <p class="exp-desc" data-i18n="exp.3.desc">Building intelligent systems using Python, prompt engineering, and AI workflow automation. Developing AI-powered applications that solve real-world problems efficiently.</p>
+          <div class="exp-tools">
+            <span>Python</span><span>Prompt Eng.</span><span>AI Workflow</span><span>ML Models</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects section-pad grey-bg" id="projects">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-tag" data-i18n="proj.tag">Portfolio</p>
+        <h2 class="section-title" data-i18n="proj.title">Featured <span class="accent">Projects</span></h2>
+      </div>
+      <div class="projects-grid">
+
+        <div class="project-card reveal">
+          <div class="project-img">
+            <div class="project-img-placeholder"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div class="project-overlay">
+              <button onclick="openProjectModal('https://goalsaver.vercel.app','GoalSaver')" class="btn-project"><i class="fa-solid fa-eye"></i> <span data-i18n="proj.view">View Project</span></button>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags"><span class="ptag ai">AI</span><span class="ptag" data-i18n="proj.finance">Finance</span></div>
+            <h3>GoalSaver</h3>
+            <p data-i18n="proj.sava.desc">AI-powered personal financial assistant that analyzes spending patterns and provides intelligent budgeting recommendations.</p>
+            <a href="https://goalsaver.vercel.app" target="_blank" rel="noopener" class="proj-link">goalsaver.vercel.app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img">
+            <div class="project-img-placeholder"><i class="fa-solid fa-mosque"></i></div>
+            <div class="project-overlay">
+              <button onclick="openProjectModal('https://tpqdarussalam.vercel.app','TPQ Darussalam')" class="btn-project"><i class="fa-solid fa-eye"></i> <span data-i18n="proj.view">View Project</span></button>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags"><span class="ptag web">Web</span><span class="ptag" data-i18n="proj.education">Education</span></div>
+            <h3>TPQ Darussalam</h3>
+            <p data-i18n="proj.tpq.desc">Official website for TPQ Darussalam — featuring class schedules, student information, and digital presence for the Islamic learning institution.</p>
+            <a href="https://tpqdarussalam.vercel.app" target="_blank" rel="noopener" class="proj-link">tpqdarussalam.vercel.app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img">
+            <div class="project-img-placeholder"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <div class="project-overlay">
+              <button onclick="openProjectModal('https://undangandg.click','Undangan Digital')" class="btn-project"><i class="fa-solid fa-eye"></i> <span data-i18n="proj.view">View Project</span></button>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags"><span class="ptag web">Web</span><span class="ptag" data-i18n="proj.invitation">Invitation</span></div>
+            <h3>Undangan Digital</h3>
+            <p data-i18n="proj.undangan.desc">Elegant digital invitation platform for weddings and events — beautifully designed, mobile-friendly, and easy to share online.</p>
+            <a href="https://undangandg.click" target="_blank" rel="noopener" class="proj-link">undangandg.click <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DESIGN PORTFOLIO -->
+  <section class="design-portfolio section-pad" id="design">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-tag" data-i18n="design.tag">Creative Works</p>
+        <h2 class="section-title" data-i18n="design.title">Design <span class="accent">Portfolio</span></h2>
+        <p class="section-sub" data-i18n="design.sub">A collection of graphic design works — from social media content to brand identity.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="design-filters reveal">
+        <button class="filter-btn active" data-filter="all" data-i18n="design.filter.all">All</button>
+        <button class="filter-btn" data-filter="social" data-i18n="design.filter.social">Social Media</button>
+        <button class="filter-btn" data-filter="poster" data-i18n="design.filter.poster">Poster</button>
+        <button class="filter-btn" data-filter="brand" data-i18n="design.filter.brand">Branding</button>
+        <button class="filter-btn" data-filter="competition" data-i18n="design.filter.competition">Competition</button>
+      </div>
+
+      <!-- Design Grid -->
+      <div class="design-grid" id="designGrid">
+
+        <div class="design-card reveal" data-category="social">
+          <div class="design-img-wrap">
+            <div class="design-img-placeholder"><i class="fa-brands fa-instagram"></i></div>
+            <div class="design-overlay">
+              <button class="design-zoom" onclick="openLightbox(this)" data-i18n-title="design.zoom" title="View Full"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+          </div>
+          <div class="design-info">
+            <span class="design-cat social-cat" data-i18n="design.filter.social">Social Media</span>
+            <p class="design-name" data-i18n="design.item.1">Instagram Feed — School Organization</p>
+          </div>
+        </div>
+
+        <div class="design-card reveal" data-category="social">
+          <div class="design-img-wrap">
+            <div class="design-img-placeholder"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="design-overlay">
+              <button class="design-zoom" onclick="openLightbox(this)" title="View Full"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+          </div>
+          <div class="design-info">
+            <span class="design-cat social-cat" data-i18n="design.filter.social">Social Media</span>
+            <p class="design-name" data-i18n="design.item.2">Event Announcement Post</p>
+          </div>
+        </div>
+
+        <div class="design-card reveal" data-category="poster">
+          <div class="design-img-wrap">
+            <div class="design-img-placeholder"><i class="fa-solid fa-image"></i></div>
+            <div class="design-overlay">
+              <button class="design-zoom" onclick="openLightbox(this)" title="View Full"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+          </div>
+          <div class="design-info">
+            <span class="design-cat poster-cat" data-i18n="design.filter.poster">Poster</span>
+            <p class="design-name" data-i18n="design.item.3">School Event Poster</p>
+          </div>
+        </div>
+
+        <div class="design-card reveal" data-category="competition">
+          <div class="design-img-wrap">
+            <div class="design-img-placeholder"><i class="fa-solid fa-trophy"></i></div>
+            <div class="design-overlay">
+              <button class="design-zoom" onclick="openLightbox(this)" title="View Full"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+          </div>
+          <div class="design-info">
+            <span class="design-cat comp-cat" data-i18n="design.filter.competition">Competition</span>
+            <p class="design-name" data-i18n="design.item.4">Graphic Design Competition Entry</p>
+          </div>
+        </div>
+
+        <div class="design-card reveal" data-category="brand">
+          <div class="design-img-wrap">
+            <div class="design-img-placeholder"><i class="fa-solid fa-pen-nib"></i></div>
+            <div class="design-overlay">
+              <button class="design-zoom" onclick="openLightbox(this)" title="View Full"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+          </div>
+          <div class="design-info">
+            <span class="design-cat brand-cat" data-i18n="design.filter.brand">Branding</span>
+            <p class="design-name" data-i18n="design.item.5">Logo & Brand Identity</p>
+          </div>
+        </div>
+
+        <div class="design-card reveal" data-category="poster">
+          <div class="design-img-wrap">
+            <div class="design-img-placeholder"><i class="fa-solid fa-bullhorn"></i></div>
+            <div class="design-overlay">
+              <button class="design-zoom" onclick="openLightbox(this)" title="View Full"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+          </div>
+          <div class="design-info">
+            <span class="design-cat poster-cat" data-i18n="design.filter.poster">Poster</span>
+            <p class="design-name" data-i18n="design.item.6">Infographic Poster</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Upload hint -->
+      <p class="design-hint reveal" data-i18n="design.hint">💡 Replace the placeholders above with your actual design images by updating the <code>src</code> in each card.</p>
+    </div>
+  </section>
+
+  <!-- PROJECT PREVIEW MODAL -->
+  <div class="proj-modal" id="projModal">
+    <div class="proj-modal-inner">
+      <div class="proj-modal-header">
+        <span class="proj-modal-title" id="projModalTitle"></span>
+        <div class="proj-modal-actions">
+          <a class="proj-modal-open" id="projModalOpen" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="proj.opensite">Open Site</span></a>
+          <button class="proj-modal-close" onclick="closeProjectModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="proj-modal-body">
+        <iframe id="projModalFrame" src="" title="Project Preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        <div class="proj-modal-fallback" id="projModalFallback">
+          <i class="fa-solid fa-globe"></i>
+          <p data-i18n="proj.blocked">This site can't be displayed in preview mode.</p>
+          <a id="projModalFallbackLink" href="#" target="_blank" rel="noopener" class="btn-primary" data-i18n="proj.opensite">Open Site</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lightboxImg" src="" alt="Design preview" />
+  </div>
+
+  <!-- SKILLS -->
+  <section class="skills section-pad" id="skills">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-tag" data-i18n="skills.tag">Expertise</p>
+        <h2 class="section-title" data-i18n="skills.title">Skills <span class="accent">Grid</span></h2>
+      </div>
+      <div class="skills-grid">
+
+        <div class="skill-category reveal">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon ai-icon"><i class="fa-solid fa-brain"></i></div>
+            <h3 data-i18n="skills.ai.title">AI &amp; Logic</h3>
+          </div>
+          <ul class="skill-list">
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.ai.1">Prompt Engineering</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.ai.2">AI Workflow Automation</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.ai.3">Python Programming</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.ai.4">Machine Learning Basics</span></li>
+          </ul>
+        </div>
+
+        <div class="skill-category reveal">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon dev-icon"><i class="fa-solid fa-code"></i></div>
+            <h3 data-i18n="skills.dev.title">Development</h3>
+          </div>
+          <ul class="skill-list">
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.dev.1">Full-Stack Web (Laravel)</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.dev.2">JavaScript / Alpine.js</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.dev.3">Tailwind &amp; Bootstrap</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.dev.4">Informatics Engineering</span></li>
+          </ul>
+        </div>
+
+        <div class="skill-category reveal">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon design-icon"><i class="fa-solid fa-pen-nib"></i></div>
+            <h3 data-i18n="skills.design.title">Design</h3>
+          </div>
+          <ul class="skill-list">
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.design.1">Graphic Design</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.design.2">UI/UX Design</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.design.3">Cinematic Videography</span></li>
+            <li><i class="fa-solid fa-check-circle"></i> <span data-i18n="skills.design.4">Brand Identity</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact section-pad grey-bg" id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-tag" data-i18n="contact.tag">Let's Talk</p>
+        <h2 class="section-title" data-i18n="contact.title">Get In <span class="accent">Touch</span></h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <p class="contact-intro" data-i18n="contact.intro">Have a project in mind or want to collaborate? I'd love to hear from you.</p>
+          <div class="contact-item"><i class="fa-solid fa-envelope accent"></i><span>[your.email@example.com]</span></div>
+          <div class="contact-item"><i class="fa-solid fa-location-dot accent"></i><span data-i18n="contact.location">Sidoarjo, East Java, Indonesia</span></div>
+          <div class="social-links">
+            <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+        <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <input type="text" data-i18n-placeholder="contact.form.name" placeholder="Your Name" required />
+          </div>
+          <div class="form-group">
+            <input type="email" data-i18n-placeholder="contact.form.email" placeholder="Your Email" required />
+          </div>
+          <div class="form-group">
+            <input type="text" data-i18n-placeholder="contact.form.subject" placeholder="Subject" />
+          </div>
+          <div class="form-group">
+            <textarea rows="5" data-i18n-placeholder="contact.form.message" placeholder="Your Message" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary full-width" data-i18n="contact.form.send">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p data-i18n="footer.tagline">Innovating for the Future.</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2025 Sayyid Naabih Musyaffa. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
