@@ -98,24 +98,13 @@ document.querySelectorAll('.exp-card, .project-card, .skill-category').forEach(c
 
 // ===== I18N =====
 let currentLang = localStorage.getItem('lang') || 'en';
-let translations = {};
 
-async function loadLang(lang) {
-  if (!translations[lang]) {
-    try {
-      const res = await fetch(`lang/${lang}.json`);
-      translations[lang] = await res.json();
-    } catch(e) {
-      console.warn('Lang file not found, using fallback');
-      translations[lang] = {};
-    }
-  }
-  const t = translations[lang];
+function applyLang(lang) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (key === 'hero.subtitle') return;
-    const v = t[key];
-    if (v !== undefined) el.innerHTML = v;
+    if (t[key] !== undefined) el.innerHTML = t[key];
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const v = t[el.getAttribute('data-i18n-placeholder')];
@@ -126,12 +115,12 @@ async function loadLang(lang) {
   if (label) label.textContent = lang === 'en' ? 'ID' : 'EN';
 }
 
-loadLang(currentLang);
+applyLang(currentLang);
 
 document.getElementById('langToggle').addEventListener('click', () => {
   currentLang = currentLang === 'en' ? 'id' : 'en';
   localStorage.setItem('lang', currentLang);
-  loadLang(currentLang);
+  applyLang(currentLang);
 });
 
 // ===== SCROLL REVEAL =====
@@ -223,8 +212,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLight
 function handleSubmit(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
-  const t = translations[currentLang] || {};
+  const t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
   btn.textContent = currentLang === 'id' ? 'Pesan Terkirim!' : 'Message Sent!';
   btn.style.background = '#10b981';
-  setTimeout(() => { btn.innerHTML = t['contact.form.send'] || 'Send Message'; btn.style.background = ''; e.target.reset(); }, 3000);
+  setTimeout(() => { btn.innerHTML = t['contact.form.send']; btn.style.background = ''; e.target.reset(); }, 3000);
 }
