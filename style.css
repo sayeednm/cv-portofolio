@@ -658,3 +658,28 @@ img { max-width: 100%; height: auto; }
   transition: background var(--transition);
 }
 .video-modal-close:hover { background: #ef4444; }
+
+/* ===== DESIGN SUB HEADER ===== */
+.design-sub-header { margin-bottom: 24px; }
+.design-sub-title {
+  font-size: 1.2rem; font-weight: 700; color: var(--text-bright);
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-accent);
+}
+.design-sub-title i { color: var(--accent); }
+
+/* ===== PERFORMANCE & MOBILE FINAL ===== */
+@media (max-width: 768px) {
+  .cursor-glow { display: none; }
+  .particles-canvas { opacity: 0.4; }
+  .blob { display: none; }
+  .design-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .design-img-wrap { height: 160px; }
+  .design-sub-title { font-size: 1rem; }
+}
+@media (max-width: 480px) {
+  .design-grid { grid-template-columns: 1fr; }
+  .hobbies-grid { grid-template-columns: 1fr 1fr; }
+  .skillbars-grid { grid-template-columns: 1fr; }
+}

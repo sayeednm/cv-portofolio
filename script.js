@@ -9,12 +9,14 @@ document.addEventListener('mousemove', e => {
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 let particles = [];
+const isMobile = window.innerWidth < 768;
+const particleCount = isMobile ? 20 : 60;
 
 function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-for (let i = 0; i < 60; i++) particles.push({
+for (let i = 0; i < particleCount; i++) particles.push({
   x: Math.random() * canvas.width, y: Math.random() * canvas.height,
   r: Math.random() * 2 + 0.5,
   dx: (Math.random() - 0.5) * 0.4, dy: (Math.random() - 0.5) * 0.4,
@@ -91,15 +93,17 @@ const counterObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.stat-num').forEach(el => counterObs.observe(el));
 
 // ===== CARD TILT =====
-document.querySelectorAll('.exp-card, .project-card, .skill-category').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+if (!isMobile) {
+  document.querySelectorAll('.exp-card, .project-card, .skill-category').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+    });
+    card.addEventListener('mouseleave', () => card.style.transform = '');
   });
-  card.addEventListener('mouseleave', () => card.style.transform = '');
-});
+}
 
 // ===== I18N =====
 let currentLang = localStorage.getItem('lang') || 'en';
