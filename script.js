@@ -25,7 +25,7 @@ function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   particles.forEach(p => {
     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0,180,216,${p.alpha})`; ctx.fill();
+    ctx.fillStyle = `rgba(16,185,129,${p.alpha})`; ctx.fill();
     p.x += p.dx; p.y += p.dy;
     if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
     if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
@@ -35,7 +35,7 @@ function drawParticles() {
       const d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
       if (d < 100) {
         ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0,180,216,${0.06 * (1 - d / 100)})`; ctx.lineWidth = 0.5; ctx.stroke();
+        ctx.strokeStyle = `rgba(16,185,129,${0.06 * (1 - d / 100)})`; ctx.lineWidth = 0.5; ctx.stroke();
       }
     }
   requestAnimationFrame(drawParticles);
