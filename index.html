@@ -178,7 +178,7 @@
             </div>
             <div class="timeline-body">
               <h3>SMA Muhammadiyah 3 Tulangan</h3>
-              <p class="timeline-degree" data-i18n="edu.2.degree">Jurusan Bahasa · Kelas Peminatan: Informatika, Bahasa Inggris, Bahasa Jepang, Bahasa Arab</p>
+              <p class="timeline-degree" data-i18n="edu.2.degree">Boarding School · Peminatan: Informatika, Bahasa Inggris, Bahasa Jepang, Bahasa Arab</p>
               <p class="timeline-desc" data-i18n="edu.2.desc">Lembaga pendidikan yang memadukan kurikulum akademik, pendidikan karakter, dan asrama.</p>
             </div>
           </div>
@@ -614,16 +614,16 @@
           <input type="hidden" name="subject" value="Pesan dari Portfolio - Sayyid Naabih" />
           <input type="hidden" name="from_name" value="Portfolio Contact Form" />
           <div class="form-group">
-            <input type="text" data-i18n-placeholder="contact.form.name" placeholder="Your Name" required />
+            <input type="text" name="name" data-i18n-placeholder="contact.form.name" placeholder="Your Name" required />
           </div>
           <div class="form-group">
-            <input type="email" data-i18n-placeholder="contact.form.email" placeholder="Your Email" required />
+            <input type="email" name="email" data-i18n-placeholder="contact.form.email" placeholder="Your Email" required />
           </div>
           <div class="form-group">
-            <input type="text" data-i18n-placeholder="contact.form.subject" placeholder="Subject" />
+            <input type="text" name="subject_user" data-i18n-placeholder="contact.form.subject" placeholder="Subject" />
           </div>
           <div class="form-group">
-            <textarea rows="5" data-i18n-placeholder="contact.form.message" placeholder="Your Message" required></textarea>
+            <textarea rows="5" name="message" data-i18n-placeholder="contact.form.message" placeholder="Your Message" required></textarea>
           </div>
           <button type="submit" class="btn-primary full-width" data-i18n="contact.form.send">Send Message <i class="fa-solid fa-paper-plane"></i></button>
         </form>
@@ -641,6 +641,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 

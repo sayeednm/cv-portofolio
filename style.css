@@ -604,12 +604,10 @@ img { max-width: 100%; height: auto; }
 /* ===== MOBILE ANIMATION FIX ===== */
 @media (max-width: 768px) {
   /* disable slide left/right on mobile, use fade up only */
-  .reveal.slide-left { transform: translateY(40px); }
-  .reveal.slide-right { transform: translateY(40px); }
+  .reveal.slide-left { transform: translateY(30px); }
+  .reveal.slide-right { transform: translateY(30px); }
   .reveal.slide-left.visible { transform: translateY(0); }
   .reveal.slide-right.visible { transform: translateY(0); }
-  /* reduce animation distance */
-  .reveal { transform: translateY(24px); }
 }
 
 /* ===== PROJECT REAL IMAGE ===== */

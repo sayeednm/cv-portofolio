@@ -144,7 +144,6 @@ const revealObs = new IntersectionObserver((entries, obs) => {
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
 document.querySelectorAll('.reveal').forEach((el, i) => {
-  // auto stagger delay for grid children
   const parent = el.parentElement;
   const siblings = parent ? [...parent.querySelectorAll(':scope > .reveal')] : [];
   if (siblings.length > 1 && !el.hasAttribute('data-delay')) {
@@ -153,7 +152,8 @@ document.querySelectorAll('.reveal').forEach((el, i) => {
   revealObs.observe(el);
 });
 
-window.addEventListener('load', () => {
+// show elements already in viewport on load
+setTimeout(() => {
   document.querySelectorAll('.reveal:not(.visible)').forEach((el) => {
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight - 50) {
@@ -161,7 +161,7 @@ window.addEventListener('load', () => {
       setTimeout(() => el.classList.add('visible'), delay);
     }
   });
-});
+}, 100);
 
 // Fallback: show all reveal elements after 1s regardless
 setTimeout(() => {
