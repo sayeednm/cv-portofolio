@@ -130,21 +130,31 @@ document.getElementById('langToggle').addEventListener('click', () => {
 
 // ===== SCROLL REVEAL =====
 const revealObs = new IntersectionObserver((entries, obs) => {
-  entries.forEach((e, i) => {
+  entries.forEach((e) => {
     if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 100);
+      const delay = parseInt(e.target.getAttribute('data-delay') || 0);
+      setTimeout(() => e.target.classList.add('visible'), delay);
       obs.unobserve(e.target);
     }
   });
-}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-// show elements already in viewport on load
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  // auto stagger delay for grid children
+  const parent = el.parentElement;
+  const siblings = parent ? [...parent.querySelectorAll(':scope > .reveal')] : [];
+  if (siblings.length > 1 && !el.hasAttribute('data-delay')) {
+    el.setAttribute('data-delay', siblings.indexOf(el) * 120);
+  }
+  revealObs.observe(el);
+});
+
 window.addEventListener('load', () => {
-  document.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach((el) => {
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 60) {
-      setTimeout(() => el.classList.add('visible'), i * 80);
+    if (rect.top < window.innerHeight - 50) {
+      const delay = parseInt(el.getAttribute('data-delay') || 0);
+      setTimeout(() => el.classList.add('visible'), delay);
     }
   });
 });

@@ -54,7 +54,7 @@ const TRANSLATIONS = {
     "hobby.4.title": "Tech Exploration", "hobby.4.desc": "Exploring AI, new tools, and the latest technology trends is an activity that always keeps me excited and inspired.",
     "footer.tagline": "Innovating for the Future.",
     "footer.copy": "© 2025 Sayyid Naabih Musyaffa. All rights reserved.",
-    "design.tag": "Creative Works", "design.title": "Design <span class=\"accent\">Portfolio</span>",
+    "design.tag": "Creative Works", "design.title": "Project yang Pernah <span class=\"accent\">Saya Buat</span>",
     "design.sub": "A collection of graphic design works — from social media content to brand identity.",
     "design.filter.all": "All", "design.filter.social": "Social Media", "design.filter.poster": "Poster",
     "design.filter.brand": "Branding", "design.filter.competition": "Competition",
