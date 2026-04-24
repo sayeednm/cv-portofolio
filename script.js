@@ -132,6 +132,17 @@ document.getElementById('langToggle').addEventListener('click', () => {
   applyLang(currentLang);
 });
 
+// ===== ABOUT PHOTO SLIDESHOW =====
+const aboutSlides = document.querySelectorAll('.about-slide');
+if (aboutSlides.length > 1) {
+  let current = 0;
+  setInterval(() => {
+    aboutSlides[current].classList.remove('active');
+    current = (current + 1) % aboutSlides.length;
+    aboutSlides[current].classList.add('active');
+  }, 3500);
+}
+
 // ===== SCROLL REVEAL =====
 const revealObs = new IntersectionObserver((entries, obs) => {
   entries.forEach((e) => {
