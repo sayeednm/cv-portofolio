@@ -16,7 +16,20 @@
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
 </head>
 <body>
+  <!-- Ambient Background -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress"></div>
+
+  <!-- Custom Cursor -->
   <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
   <!-- NAV -->
   <nav class="navbar">
@@ -47,6 +60,9 @@
         <div class="hero-photo-placeholder">
           <img src="images/profile-main.jpg" alt="Sayyid Naabih Musyaffa" class="hero-photo-img" />
         </div>
+        <div class="hero-chip hero-chip-1"><i class="fa-solid fa-robot"></i> AI Engineer</div>
+        <div class="hero-chip hero-chip-2"><i class="fa-solid fa-palette"></i> Designer</div>
+        <div class="hero-chip hero-chip-3"><i class="fa-solid fa-code"></i> Developer</div>
       </div>
     </div>
     <div class="hero-right reveal slide-right" data-delay="200">
