@@ -613,7 +613,8 @@
       if (!isDragging) return;
       if (e.cancelable) e.preventDefault();
       const p = getPos(e);
-      const nx = p.x - dox, ny = p.y - doy;
+      // pointer is in viewport coords -> convert to .hero-left box coords
+      const nx = p.x - offX - dox, ny = p.y - offY - doy;
       vx = (nx - cx) * 0.5; vy = (ny - cy) * 0.5;
       cx = Math.max(20 - offX, Math.min(window.innerWidth - 20 - offX, nx));
       cy = Math.max(80 - offY, Math.min(window.innerHeight - 20 - offY, ny));
