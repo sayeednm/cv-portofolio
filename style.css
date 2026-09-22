@@ -199,6 +199,7 @@ body::after {
 .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-bright); border-radius: 2px; transition: var(--transition); }
 
+/* ===== LANGUAGE TOGGLE (text-only, no flags) ===== */
 .lang-toggle {
   display: flex; align-items: center; gap: 6px;
   background: var(--accent-soft);
@@ -211,6 +212,7 @@ body::after {
 }
 .lang-toggle:hover { background: var(--accent-grad); color: white; border-color: transparent; }
 .lang-icon { font-size: 1rem; }
+.lang-label { min-width: 2ch; text-align: center; }
 
 /* ===== HERO ===== */
 .hero {
@@ -958,9 +960,10 @@ body::after {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); z-index: 999;
   }
   .nav-links.open { display: flex; }
-  .nav-links a { font-size: 1rem; }
+  .nav-links a { font-size: 1rem; padding: 10px 4px; } /* comfortable tap targets */
   .hamburger { display: flex; order: 3; }
   .lang-toggle { padding: 6px 10px; font-size: 0.75rem; margin-right: 4px; order: 2; }
+  .hamburger { order: 3; }
   .nav-logo { order: 1; flex: 1; }
   .section-pad { padding: 60px 0; }
   .section-title { font-size: 1.8rem; }

@@ -338,12 +338,9 @@
       if (v !== undefined) el.setAttribute('placeholder', v);
     });
     document.documentElement.lang = lang;
-    const label = document.querySelector('.lang-label');
+    // Text-only toggle: label shows the language you can switch TO.
+    const label = document.getElementById('langLabel');
     if (label) label.textContent = lang === 'en' ? 'ID' : 'EN';
-    const flag = document.getElementById('langFlag');
-    if (flag) flag.src = lang === 'en'
-      ? 'https://flagcdn.com/w20/gb.png'
-      : 'https://flagcdn.com/w20/id.png';
   }
 
   applyLang(currentLang);
@@ -482,7 +479,7 @@
     const ctx = lcanvas.getContext('2d');
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-    let W, H, CARD_W, CARD_H, REST_X, REST_Y;
+    let W, H, CARD_W, CARD_H, REST_X, REST_Y, offX = 0, offY = 0;
     let cx = 0, cy = 0, vx = 0, vy = 0;
     let isDragging = false, dox = 0, doy = 0;
     const STIFF = 0.009, DAMP = 0.75, BOUNCE = 1.4;
@@ -495,10 +492,27 @@
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       CARD_W = card.offsetWidth || 220;
       CARD_H = card.offsetHeight || 390;
-      const r = scene.getBoundingClientRect();
-      REST_X = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
-      REST_Y = r.top + r.height * 0.42;
+      computeRest();
       if (cx === 0 && cy === 0) { cx = REST_X; cy = REST_Y; }
+      placeAtRest();
+    }
+
+    // The card is position:fixed but lives inside .hero-left which carries a
+    // CSS transform, making that box its containing block. All card coords
+    // are therefore kept in .hero-left space (offX/offY = box origin in
+    // viewport coords) so physics, drag and rendering stay consistent.
+    function computeRest() {
+      const r = scene.getBoundingClientRect();
+      const box = card.closest('.hero-left') || scene.parentElement;
+      const br = box.getBoundingClientRect();
+      offX = br.left; offY = br.top;
+      REST_X = (window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2) - offX;
+      REST_Y = (r.top + r.height * 0.42) - offY;
+    }
+
+    function placeAtRest() {
+      card.style.left = (cx - CARD_W / 2) + 'px';
+      card.style.top = (cy - CARD_H / 2) + 'px';
     }
 
     function drawLanyard() {
@@ -551,7 +565,7 @@
         tiltY = Math.max(-15, Math.min(15, vx * 0.8));
       }
       card.style.transform = `rotate(${rotZ}deg) perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-      card.style.zIndex = '998';
+      card.style.zIndex = '990';
       card.style.setProperty('--shine-x', (50 + tiltY * 2) + '%');
       card.style.setProperty('--shine-y', (50 - tiltX * 2) + '%');
     }
@@ -559,9 +573,7 @@
     function loop() {
       if (document.hidden) { requestAnimationFrame(loop); return; }
       if (!isDragging) {
-        const r = scene.getBoundingClientRect();
-        REST_X = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
-        REST_Y = r.top + r.height * 0.42;
+        computeRest();
         const dx = REST_X - cx, dy = REST_Y - cy;
         if (Math.abs(vx) + Math.abs(vy) + Math.abs(dx) + Math.abs(dy) > 0.3) {
           vx = (vx + dx * STIFF) * DAMP;
@@ -584,14 +596,14 @@
     card.addEventListener('mousedown', function (e) {
       e.preventDefault(); isDragging = true;
       card.style.cursor = 'grabbing';
-      const p = getPos(e); dox = p.x - cx; doy = p.y - cy;
+      const p = getPos(e); dox = p.x - offX - cx; doy = p.y - offY - cy;
       vx = 0; vy = 0;
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
     });
     card.addEventListener('touchstart', function (e) {
       isDragging = true;
-      const p = getPos(e); dox = p.x - cx; doy = p.y - cy;
+      const p = getPos(e); dox = p.x - offX - cx; doy = p.y - offY - cy;
       vx = 0; vy = 0;
       document.addEventListener('touchmove', onMove, { passive: false });
       document.addEventListener('touchend', onUp);
@@ -603,8 +615,8 @@
       const p = getPos(e);
       const nx = p.x - dox, ny = p.y - doy;
       vx = (nx - cx) * 0.5; vy = (ny - cy) * 0.5;
-      cx = Math.max(20, Math.min(window.innerWidth - 20, nx));
-      cy = Math.max(80, Math.min(window.innerHeight - 20, ny));
+      cx = Math.max(20 - offX, Math.min(window.innerWidth - 20 - offX, nx));
+      cy = Math.max(80 - offY, Math.min(window.innerHeight - 20 - offY, ny));
     }
     function onUp() {
       isDragging = false; card.style.cursor = 'grab';
