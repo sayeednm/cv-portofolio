@@ -482,6 +482,22 @@
     let W, H, CARD_W, CARD_H, REST_X, REST_Y, offX = 0, offY = 0;
     let cx = 0, cy = 0, vx = 0, vy = 0;
     let isDragging = false, dox = 0, doy = 0;
+    let downX = 0, downY = 0;
+    let flipped = false;
+
+    function flipCard() {
+      flipped = !flipped;
+      const inner = card.querySelector('.id-card-inner');
+      if (!inner) { card.classList.toggle('flipped', flipped); return; }
+      // start from one full spin behind the target so every flip does a 360
+      const start = flipped ? -180 : 360;
+      inner.style.transition = 'none';
+      inner.style.transform = `rotateY(${start}deg)`;
+      void inner.offsetWidth; // flush before re-enabling the transition
+      inner.style.transition = '';
+      inner.style.transform = ''; // CSS rule (.flipped) now drives the target
+      card.classList.toggle('flipped', flipped);
+    }
     const STIFF = 0.009, DAMP = 0.75, BOUNCE = 1.4;
 
     function resize() {
@@ -594,7 +610,11 @@
       return { x: s.clientX, y: s.clientY };
     }
     card.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      // let social links on the back face handle their own clicks
+      if (e.target.closest('.id-card-back-socials a')) return;
       e.preventDefault(); isDragging = true;
+      downX = e.clientX; downY = e.clientY;
       card.style.cursor = 'grabbing';
       const p = getPos(e); dox = p.x - offX - cx; doy = p.y - offY - cy;
       vx = 0; vy = 0;
@@ -602,7 +622,9 @@
       document.addEventListener('mouseup', onUp);
     });
     card.addEventListener('touchstart', function (e) {
+      if (e.target.closest('.id-card-back-socials a')) return;
       isDragging = true;
+      const p0 = getPos(e); downX = p0.x; downY = p0.y;
       const p = getPos(e); dox = p.x - offX - cx; doy = p.y - offY - cy;
       vx = 0; vy = 0;
       document.addEventListener('touchmove', onMove, { passive: false });
@@ -619,8 +641,15 @@
       cx = Math.max(20 - offX, Math.min(window.innerWidth - 20 - offX, nx));
       cy = Math.max(80 - offY, Math.min(window.innerHeight - 20 - offY, ny));
     }
-    function onUp() {
+    function onUp(e) {
       isDragging = false; card.style.cursor = 'grab';
+      // short press without movement = tap -> flip the card 3D-style
+      let upX = downX, upY = downY;
+      if (e) {
+        const s = e.changedTouches ? e.changedTouches[0] : e;
+        if (s && typeof s.clientX === 'number') { upX = s.clientX; upY = s.clientY; }
+      }
+      if (Math.hypot(upX - downX, upY - downY) < 8) flipCard();
       vx *= BOUNCE; vy *= BOUNCE;
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
