@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Sayyid Naabih Musyaffa ΓÇö AI Engineer & Graphic Designer. Portfolio of web development, graphic design, and videography projects." />
+  <meta name="description" content="Sayyid Naabih Musyaffa — AI Engineer & Graphic Designer. Portfolio of web development, graphic design, and videography projects." />
   <title>Sayyid Naabih Musyaffa | AI Engineer & Graphic Designer</title>
   <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,7 +15,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
 </head>
-<body>
+<body class="loading">
+  <!-- PRELOADER -->
+  <div id="preloader" aria-hidden="true">
+    <div class="preloader-logo">SNM.</div>
+    <div class="preloader-counter" id="preCounter">0</div>
+    <div class="preloader-track"><div class="preloader-bar-fill" id="preBar"></div></div>
+    <div class="preloader-label" data-i18n="preloader.label">Initializing</div>
+  </div>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="scrollProgress"></div>
   <!-- Canvas tali lanyard — fixed full screen -->
   <canvas id="lanyardCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:999;"></canvas>
   <div class="cursor-glow" id="cursorGlow"></div>
@@ -66,8 +76,8 @@
       <h2 class="hero-subtitle"><span class="accent" data-i18n="hero.subtitle"></span></h2>
       <p class="hero-desc" data-i18n="hero.desc">Transforming complex data into intelligent solutions and stunning visual experiences.</p>
       <div class="hero-cta">
-        <a href="#projects" class="btn-primary" data-i18n="hero.cta1">View Projects</a>
-        <a href="#contact" class="btn-outline" data-i18n="hero.cta2">Get In Touch</a>
+        <a href="#projects" class="btn-primary magnetic" data-i18n="hero.cta1">View Projects</a>
+        <a href="#contact" class="btn-outline magnetic" data-i18n="hero.cta2">Get In Touch</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><span class="stat-num accent">3+</span><span class="stat-label" data-i18n="hero.stat1">Years Design</span></div>
@@ -116,22 +126,22 @@
         <h2 class="section-title" data-i18n="hobby.title">Hobi & <span class="accent">Minat</span></h2>
       </div>
       <div class="hobbies-grid">
-        <div class="hobby-card reveal zoom">
+        <div class="hobby-card reveal zoom spotlight-card">
           <div class="hobby-icon"><i class="fa-solid fa-book-open-reader"></i></div>
           <h3 data-i18n="hobby.1.title">Belajar Hal Baru</h3>
           <p data-i18n="hobby.1.desc">Saya selalu antusias mempelajari teknologi, tools, dan skill baru. Bagi saya, belajar adalah investasi terbaik yang tidak pernah rugi.</p>
         </div>
-        <div class="hobby-card reveal zoom">
+        <div class="hobby-card reveal zoom spotlight-card">
           <div class="hobby-icon"><i class="fa-solid fa-mosque"></i></div>
           <h3 data-i18n="hobby.2.title">Belajar Ilmu Agama</h3>
           <p data-i18n="hobby.2.desc">Mempelajari ilmu agama Islam adalah bagian penting dari kehidupan saya. Saya percaya ilmu dunia dan akhirat harus berjalan beriringan.</p>
         </div>
-        <div class="hobby-card reveal zoom">
+        <div class="hobby-card reveal zoom spotlight-card">
           <div class="hobby-icon"><i class="fa-solid fa-pen-ruler"></i></div>
           <h3 data-i18n="hobby.3.title">Desain & Kreativitas</h3>
           <p data-i18n="hobby.3.desc">Berkarya melalui desain grafis dan videografi adalah cara saya mengekspresikan diri dan menuangkan ide-ide kreatif menjadi visual yang bermakna.</p>
         </div>
-        <div class="hobby-card reveal zoom">
+        <div class="hobby-card reveal zoom spotlight-card">
           <div class="hobby-icon"><i class="fa-solid fa-laptop-code"></i></div>
           <h3 data-i18n="hobby.4.title">Eksplorasi Teknologi</h3>
           <p data-i18n="hobby.4.desc">Mengeksplorasi AI, tools baru, dan tren teknologi terkini adalah kegiatan yang selalu membuat saya bersemangat dan terinspirasi.</p>
@@ -151,8 +161,8 @@
 
         <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
-          <div class="timeline-date">2026 ΓÇô Present</div>
-          <div class="timeline-card">
+          <div class="timeline-date">2026 – Present</div>
+          <div class="timeline-card spotlight-card">
             <div class="timeline-icon timeline-logo">
               <img loading="lazy" src="images/logo-uici.png" alt="Universitas Insan Cita Indonesia" />
             </div>
@@ -167,14 +177,14 @@
 
         <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
-          <div class="timeline-date">2025 ΓÇô Present</div>
-          <div class="timeline-card">
+          <div class="timeline-date">2025 – Present</div>
+          <div class="timeline-card spotlight-card">
             <div class="timeline-icon timeline-logo">
               <img loading="lazy" src="images/logo-elfan.png" alt="Elfan AI Academy & UICI" />
             </div>
             <div class="timeline-body">
               <h3>Elfan AI Academy</h3>
-              <p class="timeline-degree" data-i18n="edu.1.degree">Desain Grafis ┬╖ Multi Media Broadcasting ┬╖ Programming</p>
+              <p class="timeline-degree" data-i18n="edu.1.degree">Desain Grafis · Multi Media Broadcasting · Programming</p>
               <p class="timeline-desc" data-i18n="edu.1.desc">Vocational education institution based on character and IT, focused on developing AI competencies and character for productive generations in the digital era.</p>
               <span class="timeline-badge current" data-i18n="edu.current">Current</span>
             </div>
@@ -183,14 +193,14 @@
 
         <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
-          <div class="timeline-date">2022 ΓÇô 2025</div>
-          <div class="timeline-card">
+          <div class="timeline-date">2022 – 2025</div>
+          <div class="timeline-card spotlight-card">
             <div class="timeline-icon timeline-logo">
               <img loading="lazy" src="images/logo-sma.png" alt="SMA Muhammadiyah 3 Tulangan" />
             </div>
             <div class="timeline-body">
               <h3>SMA Muhammadiyah 3 Tulangan</h3>
-              <p class="timeline-degree" data-i18n="edu.2.degree">Boarding School ┬╖ Kelas Peminatan: Informatika, Bahasa Inggris, Bahasa Jepang, Bahasa Arab</p>
+              <p class="timeline-degree" data-i18n="edu.2.degree">Boarding School · Kelas Peminatan: Informatika, Bahasa Inggris, Bahasa Jepang, Bahasa Arab</p>
               <p class="timeline-desc" data-i18n="edu.2.desc">Lembaga pendidikan yang memadukan kurikulum akademik, pendidikan karakter, dan asrama.</p>
             </div>
           </div>
@@ -198,14 +208,14 @@
 
         <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
-          <div class="timeline-date">2019 ΓÇô 2022</div>
-          <div class="timeline-card">
+          <div class="timeline-date">2019 – 2022</div>
+          <div class="timeline-card spotlight-card">
             <div class="timeline-icon timeline-logo">
               <img loading="lazy" src="images/logo-smp.png" alt="SMP Muhammadiyah 5 Tulangan" />
             </div>
             <div class="timeline-body">
               <h3>SMP Muhammadiyah 5 Tulangan</h3>
-              <p class="timeline-degree" data-i18n="edu.3.degree">Boarding School ┬╖ Junior High School</p>
+              <p class="timeline-degree" data-i18n="edu.3.degree">Boarding School · Junior High School</p>
               <p class="timeline-desc" data-i18n="edu.3.desc">An educational institution that integrates academic curriculum, character education, and boarding school life.</p>
             </div>
           </div>
@@ -224,7 +234,7 @@
       </div>
       <div class="exp-grid">
 
-        <div class="exp-card reveal">
+        <div class="exp-card reveal spotlight-card">
           <div class="exp-icon"><i class="fa-solid fa-palette"></i></div>
           <h3 data-i18n="exp.1.title">Graphic Designer &amp; Videographer</h3>
           <p class="exp-type" data-i18n="exp.1.type">Independent / Project-Based</p>
@@ -234,27 +244,27 @@
           </div>
         </div>
 
-        <div class="exp-card reveal">
+        <div class="exp-card reveal spotlight-card">
           <div class="exp-icon"><i class="fa-solid fa-trophy"></i></div>
           <h3 data-i18n="exp.4.title">Graphic Design Competition</h3>
-          <p class="exp-type" data-i18n="exp.4.type">Competitor ┬╖ School Level</p>
+          <p class="exp-type" data-i18n="exp.4.type">Competitor · School Level</p>
           <p class="exp-desc" data-i18n="exp.4.desc">Participated in graphic design competitions, creating original visual works under time constraints. Sharpened skills in concept development, typography, and visual communication.</p>
           <div class="exp-tools">
             <span>Figma</span><span>Photoshop</span><span>Canva</span><span>Typography</span>
           </div>
         </div>
 
-        <div class="exp-card reveal">
+        <div class="exp-card reveal spotlight-card">
           <div class="exp-icon"><i class="fa-brands fa-instagram"></i></div>
           <h3 data-i18n="exp.5.title">Head of Media Team</h3>
-          <p class="exp-type" data-i18n="exp.5.type">School Organization ┬╖ SMA Muhammadiyah 3</p>
+          <p class="exp-type" data-i18n="exp.5.type">School Organization · SMA Muhammadiyah 3</p>
           <p class="exp-desc" data-i18n="exp.5.desc">Led the school's media division, responsible for managing and curating the official Instagram feed. Oversaw content planning, visual consistency, and post scheduling to grow the school's digital presence.</p>
           <div class="exp-tools">
             <span>Content Planning</span><span>Instagram</span><span>Canva</span><span>Team Lead</span>
           </div>
         </div>
 
-        <div class="exp-card reveal">
+        <div class="exp-card reveal spotlight-card">
           <div class="exp-icon"><i class="fa-solid fa-code"></i></div>
           <h3 data-i18n="exp.2.title">Full-Stack Web Developer</h3>
           <p class="exp-type" data-i18n="exp.2.type">Project-Based</p>
@@ -264,7 +274,7 @@
           </div>
         </div>
 
-        <div class="exp-card reveal">
+        <div class="exp-card reveal spotlight-card">
           <div class="exp-icon"><i class="fa-solid fa-robot"></i></div>
           <h3 data-i18n="exp.3.title">AI Engineer</h3>
           <p class="exp-type" data-i18n="exp.3.type">Specialized / Academic</p>
@@ -274,7 +284,7 @@
           </div>
         </div>
 
-        <div class="exp-card reveal">
+        <div class="exp-card reveal spotlight-card">
           <div class="exp-icon"><i class="fa-solid fa-video"></i></div>
           <h3 data-i18n="exp.6.title">Tim Media Seminar Ekonomi</h3>
           <p class="exp-type" data-i18n="exp.6.type">BKsPPI Jawa Tengah</p>
@@ -297,7 +307,7 @@
       </div>
       <div class="projects-grid">
 
-        <div class="project-card reveal">
+        <div class="project-card reveal spotlight-card">
           <div class="project-img">
             <img loading="lazy" src="images/project-goalsaver.jpg" alt="GoalSaver" class="project-real-img" />
             <div class="project-overlay">
@@ -312,7 +322,7 @@
           </div>
         </div>
 
-        <div class="project-card reveal">
+        <div class="project-card reveal spotlight-card">
           <div class="project-img">
             <img loading="lazy" src="images/project-tpq.jpg" alt="TPQ Darussalam" class="project-real-img" />
             <div class="project-overlay">
@@ -322,12 +332,12 @@
           <div class="project-body">
             <div class="project-tags"><span class="ptag web">Web</span><span class="ptag" data-i18n="proj.education">Education</span></div>
             <h3>TPQ Darussalam</h3>
-            <p data-i18n="proj.tpq.desc">Official website for TPQ Darussalam ΓÇö featuring class schedules, student information, and digital presence for the Islamic learning institution.</p>
+            <p data-i18n="proj.tpq.desc">Official website for TPQ Darussalam — featuring class schedules, student information, and digital presence for the Islamic learning institution.</p>
             <a href="https://tpqdarussalam.vercel.app" target="_blank" rel="noopener" class="proj-link">tpqdarussalam.vercel.app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           </div>
         </div>
 
-        <div class="project-card reveal">
+        <div class="project-card reveal spotlight-card">
           <div class="project-img">
             <img loading="lazy" src="images/project-undangan.jpg" alt="Undangan Digital" class="project-real-img" />
             <div class="project-overlay">
@@ -337,12 +347,12 @@
           <div class="project-body">
             <div class="project-tags"><span class="ptag web">Web</span><span class="ptag" data-i18n="proj.invitation">Invitation</span></div>
             <h3>Undangan Digital</h3>
-            <p data-i18n="proj.undangan.desc">Elegant digital invitation platform for weddings and events ΓÇö beautifully designed, mobile-friendly, and easy to share online.</p>
+            <p data-i18n="proj.undangan.desc">Elegant digital invitation platform for weddings and events — beautifully designed, mobile-friendly, and easy to share online.</p>
             <a href="https://undangandg.click" target="_blank" rel="noopener" class="proj-link">undangandg.click <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           </div>
         </div>
 
-        <div class="project-card reveal">
+        <div class="project-card reveal spotlight-card">
           <div class="project-img">
             <img loading="lazy" src="images/project-PropManager.jpg" alt="StayVest" class="project-real-img" />
             <div class="project-overlay">
@@ -375,49 +385,49 @@
         <h3 class="design-sub-title"><i class="fa-solid fa-image"></i> <span data-i18n="design.photo.title">Desain Grafis</span></h3>
       </div>
       <div class="design-grid" style="margin-bottom: 64px;">
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/Desain.png" alt="Desain Grafis" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">Desain Grafis</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/Desain 2.png" alt="Desain Grafis 2" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">Desain Grafis 2</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/desain 3.png" alt="Desain Grafis 3" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">Desain Grafis 3</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/ui ux.png" alt="UI UX" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">UI/UX Design</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/UI-UX (1).png" alt="UI UX 1" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">UI/UX Design 2</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/UI-UX (2).png" alt="UI UX 2" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">UI/UX Design 3</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/website produk.png" alt="Website Produk" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
           <div class="design-info"><p class="design-name">Website Produk</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/website rentalps.png" alt="Website Rental PS" />
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
           </div>
@@ -430,7 +440,7 @@
         <h3 class="design-sub-title"><i class="fa-solid fa-film"></i> <span data-i18n="design.video.title">Videografi</span></h3>
       </div>
       <div class="design-grid">
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/iBHO6N43Wfc/hqdefault.jpg" alt="Podcast" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/iBHO6N43Wfc')"><i class="fa-solid fa-play"></i></button></div>
@@ -438,7 +448,7 @@
           </div>
           <div class="design-info"><p class="design-name">Podcast</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/IJ0TuzQyXu8/hqdefault.jpg" alt="Company Profile" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/IJ0TuzQyXu8')"><i class="fa-solid fa-play"></i></button></div>
@@ -446,24 +456,24 @@
           </div>
           <div class="design-info"><p class="design-name">Company Profile</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/u889SutiOJE/hqdefault.jpg" alt="Bumper Ramadhan" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/u889SutiOJE')"><i class="fa-solid fa-play"></i></button></div>
             <div class="video-badge"><i class="fa-brands fa-youtube"></i> Shorts</div>
           </div>
-          <div class="design-info"><p class="design-name">Bumper Ramadhan ΓÇö After Effects</p></div>
+          <div class="design-info"><p class="design-name">Bumper Ramadhan — After Effects</p></div>
         </div>
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/y-hhqa1fFI0/hqdefault.jpg" alt="Motion Graphic" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/y-hhqa1fFI0')"><i class="fa-solid fa-play"></i></button></div>
             <div class="video-badge"><i class="fa-brands fa-youtube"></i> Shorts</div>
           </div>
-          <div class="design-info"><p class="design-name">Motion Graphic ΓÇö After Effects</p></div>
+          <div class="design-info"><p class="design-name">Motion Graphic — After Effects</p></div>
         </div>
 
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/31ddkZkaAy8/hqdefault.jpg" alt="Iklan Layanan Masyarakat" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/31ddkZkaAy8')"><i class="fa-solid fa-play"></i></button></div>
@@ -472,7 +482,7 @@
           <div class="design-info"><p class="design-name">Content Iklan Layanan Masyarakat</p></div>
         </div>
 
-        <div class="design-card reveal">
+        <div class="design-card reveal spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/CeFPZXHI970/hqdefault.jpg" alt="Iklan Produk" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/CeFPZXHI970')"><i class="fa-solid fa-play"></i></button></div>
@@ -527,7 +537,7 @@
       </div>
       <div class="skills-grid">
 
-        <div class="skill-category reveal">
+        <div class="skill-category reveal spotlight-card">
           <div class="skill-cat-header">
             <div class="skill-cat-icon ai-icon"><i class="fa-solid fa-brain"></i></div>
             <h3 data-i18n="skills.ai.title">AI &amp; Logic</h3>
@@ -540,7 +550,7 @@
           </ul>
         </div>
 
-        <div class="skill-category reveal">
+        <div class="skill-category reveal spotlight-card">
           <div class="skill-cat-header">
             <div class="skill-cat-icon dev-icon"><i class="fa-solid fa-code"></i></div>
             <h3 data-i18n="skills.dev.title">Development</h3>
@@ -553,7 +563,7 @@
           </ul>
         </div>
 
-        <div class="skill-category reveal">
+        <div class="skill-category reveal spotlight-card">
           <div class="skill-cat-header">
             <div class="skill-cat-icon design-icon"><i class="fa-solid fa-pen-nib"></i></div>
             <h3 data-i18n="skills.design.title">Design</h3>
@@ -664,11 +674,11 @@
   <!-- FOOTER -->
   <footer class="footer">
     <p data-i18n="footer.tagline">Innovating for the Future.</p>
-    <p class="footer-copy" data-i18n="footer.copy">┬⌐ 2025 Sayyid Naabih Musyaffa. All rights reserved.</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2025 Sayyid Naabih Musyaffa. All rights reserved.</p>
   </footer>
 
-  <script src="lang/translations.js"></script>
-  <script src="script.js"></script>
+  <script src="lang/translations.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
 
