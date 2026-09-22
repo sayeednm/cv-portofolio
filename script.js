@@ -1,3 +1,4 @@
+// @ts-nocheck — plain JavaScript project: skip TS type-checking (no runtime effect)
 // ============================================================
 //  SNM PORTFOLIO — Premium Motion Engine
 // ============================================================
