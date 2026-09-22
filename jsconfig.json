@@ -6,6 +6,5 @@
     "checkJs": false,
     "strict": false,
     "noEmit": true
-  },
-  "include": ["script.js", "lang/**/*.js"]
+  }
 }
