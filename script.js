@@ -483,20 +483,18 @@
     let cx = 0, cy = 0, vx = 0, vy = 0;
     let isDragging = false, dox = 0, doy = 0;
     let downX = 0, downY = 0;
-    let flipped = false;
+    let lastTouchEnd = 0; // ignore emulated mouse events fired right after touch
+
+    // ---- flip: JS-driven spring so the lanyard can follow the spin ----
+    let flipped = false, spinY = 0, spinV = 0, spinRest = 0, spinActive = false;
+    let glowT = 0, glowActive = 0; // travelling glow along the strap
 
     function flipCard() {
       flipped = !flipped;
-      const inner = card.querySelector('.id-card-inner');
-      if (!inner) { card.classList.toggle('flipped', flipped); return; }
-      // start from one full spin behind the target so every flip does a 360
-      const start = flipped ? -180 : 360;
-      inner.style.transition = 'none';
-      inner.style.transform = `rotateY(${start}deg)`;
-      void inner.offsetWidth; // flush before re-enabling the transition
-      inner.style.transition = '';
-      inner.style.transform = ''; // CSS rule (.flipped) now drives the target
-      card.classList.toggle('flipped', flipped);
+      spinRest += 180; // always roll forward; faces alternate 0/180/360...
+      spinActive = true;
+      glowActive = 1;
+      spinV += 26; // flick impulse -> card overshoots into a full-ish spin
     }
     const STIFF = 0.009, DAMP = 0.75, BOUNCE = 1.4;
 
@@ -536,6 +534,9 @@
       const clip = card.querySelector('.id-card-clip');
       const clipEl = clip ? clip : card.querySelector('.id-card-hole');
       const clipRect = clipEl.getBoundingClientRect();
+      // bounding rect already shrinks with the 3D spin, so the strap end
+      // naturally converges to the clip's mid-plane while flipping
+      const hw = clipRect.width / 2;
       const hx = clipRect.left + clipRect.width / 2;
       const hy = clipRect.top + clipRect.height / 2;
 
@@ -543,16 +544,23 @@
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
       const sp = 28, ay = 64;
 
-      [[midX - sp, ay], [midX + sp, ay]].forEach(([ax, ay2]) => {
-        const dx = hx - ax, dy = hy - ay2;
+      [[midX - sp, ay], [midX + sp, ay]].forEach(([ax, ay2], side) => {
+        // flip swing: whole strap rocks around its anchor...
+        const swingA = Math.sin(spinY * Math.PI / 180) * 0.18;
+        const ex = hx + (side === 0 ? -hw : hw);
+        const axx = ax + Math.sin(swingA) * 30;
+        // ...plus a whip bump that travels down while spinning
+        const whip = Math.max(-1, Math.min(1, spinV / 26)) * 14;
+        const dx = ex - axx, dy = hy - ay2;
         const len = Math.sqrt(dx * dx + dy * dy);
         const sag = len * 0.18 + 12;
-        const cpx = (ax + hx) / 2, cpy = (ay2 + hy) / 2 + sag;
+        const cpx = (axx + ex) / 2 + whip * (side === 0 ? -1 : 1);
+        const cpy = (ay2 + hy) / 2 + sag;
 
         ctx.beginPath();
-        ctx.moveTo(ax, ay2);
-        ctx.quadraticCurveTo(cpx, cpy, hx, hy);
-        const g = ctx.createLinearGradient(ax, ay2, hx, hy);
+        ctx.moveTo(axx, ay2);
+        ctx.quadraticCurveTo(cpx, cpy, ex, hy);
+        const g = ctx.createLinearGradient(axx, ay2, ex, hy);
         g.addColorStop(0, '#042b18');
         g.addColorStop(0.3, '#10B981');
         g.addColorStop(0.5, '#34D399');
@@ -562,11 +570,48 @@
         ctx.lineWidth = 11; ctx.lineCap = 'round'; ctx.stroke();
 
         ctx.beginPath();
-        ctx.moveTo(ax, ay2);
-        ctx.quadraticCurveTo(cpx, cpy, hx, hy);
+        ctx.moveTo(axx, ay2);
+        ctx.quadraticCurveTo(cpx, cpy, ex, hy);
         ctx.strokeStyle = 'rgba(255,255,255,0.16)';
         ctx.lineWidth = 3; ctx.stroke();
+
+        // travelling glow pulse along the strap (anchor -> card),
+        // always on at low intensity, brighter during a flip
+        const intensity = 0.4 + 0.6 * glowActive;
+        for (let i = 0; i < 2; i++) {
+          const t = (glowT * 0.9 + i * 0.5) % 1;
+          // quadratic bezier point at t
+          const gx = (1 - t) * (1 - t) * axx + 2 * (1 - t) * t * cpx + t * t * ex;
+          const gy = (1 - t) * (1 - t) * ay2 + 2 * (1 - t) * t * cpy + t * t * hy;
+          const fade = Math.sin(t * Math.PI); // fade in/out at both ends
+          const rad = 20 * fade;
+          if (rad > 0.5) {
+            const rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, rad);
+            rg.addColorStop(0, `rgba(110,231,183,${0.5 * intensity * fade})`);
+            rg.addColorStop(0.5, `rgba(52,211,153,${0.22 * intensity * fade})`);
+            rg.addColorStop(1, 'rgba(16,185,129,0)');
+            ctx.fillStyle = rg;
+            ctx.beginPath(); ctx.arc(gx, gy, rad, 0, Math.PI * 2); ctx.fill();
+          }
+        }
       });
+    }
+
+    function stepSpin() {
+      glowT += 0.016;
+      if (glowActive > 0) glowActive = Math.max(0, glowActive - 0.006); // fade after flip
+      if (!spinActive) return;
+      const dist = spinRest - spinY;
+      spinV += dist * 0.12;   // spring toward target face
+      spinV *= 0.86;          // damping
+      spinY += spinV;
+      if (Math.abs(dist) < 0.4 && Math.abs(spinV) < 0.4) {
+        spinY = spinRest; spinV = 0; spinActive = false;
+        // renormalize both angles (visually identical) so the spin distance
+        // never grows across flips
+        const k = Math.floor(spinRest / 360) * 360;
+        if (k) { spinY -= k; spinRest -= k; }
+      }
     }
 
     function applyCard() {
@@ -580,10 +625,22 @@
         tiltX = Math.max(-15, Math.min(15, -vy * 0.8));
         tiltY = Math.max(-15, Math.min(15, vx * 0.8));
       }
-      card.style.transform = `rotate(${rotZ}deg) perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+      // flip angle now lives on the card itself (faces are flat children)
+      const spinRad = spinY * Math.PI / 180;
+      card.style.transform = `rotate(${rotZ}deg) perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) rotateY(${spinY}deg)`;
       card.style.zIndex = '990';
       card.style.setProperty('--shine-x', (50 + tiltY * 2) + '%');
       card.style.setProperty('--shine-y', (50 - tiltX * 2) + '%');
+      // light sweep + edge glow while spinning (strongest near 90deg edge-on)
+      const edge = Math.abs(Math.sin(spinRad));
+      card.style.setProperty('--sweep-progress', (1 - edge).toFixed(3));
+      card.style.setProperty('--face-opacity', Math.max(0.12, Math.abs(Math.cos(spinRad))).toFixed(3));
+      card.style.setProperty('--card-glow', edge.toFixed(3));
+      card.style.boxShadow = edge > 0.05
+        ? `0 20px 60px rgba(0,0,0,0.6), 0 0 ${18 + edge * 44}px rgba(16,185,129,${0.28 * edge + glowActive * 0.25})`
+        : (glowActive > 0.02
+          ? `0 20px 60px rgba(0,0,0,0.6), 0 0 ${14 + glowActive * 26}px rgba(16,185,129,${0.3 * glowActive})`
+          : '');
     }
 
     function loop() {
@@ -601,6 +658,7 @@
                           scene.getBoundingClientRect().top < window.innerHeight;
       lcanvas.style.display = heroVisible ? '' : 'none';
       card.style.display = heroVisible ? '' : 'none';
+      stepSpin();
       if (heroVisible) { drawLanyard(); applyCard(); }
       requestAnimationFrame(loop);
     }
@@ -611,8 +669,9 @@
     }
     card.addEventListener('mousedown', function (e) {
       if (e.button !== 0) return;
-      // let social links on the back face handle their own clicks
-      if (e.target.closest('.id-card-back-socials a')) return;
+      // ignore the emulated mouse events browsers fire right after a tap;
+      // without this the flip runs twice on mobile and snaps back to the front
+      if (performance.now() - lastTouchEnd < 600) return;
       e.preventDefault(); isDragging = true;
       downX = e.clientX; downY = e.clientY;
       card.style.cursor = 'grabbing';
@@ -622,7 +681,6 @@
       document.addEventListener('mouseup', onUp);
     });
     card.addEventListener('touchstart', function (e) {
-      if (e.target.closest('.id-card-back-socials a')) return;
       isDragging = true;
       const p0 = getPos(e); downX = p0.x; downY = p0.y;
       const p = getPos(e); dox = p.x - offX - cx; doy = p.y - offY - cy;
@@ -643,6 +701,7 @@
     }
     function onUp(e) {
       isDragging = false; card.style.cursor = 'grab';
+      if (e && e.changedTouches) lastTouchEnd = performance.now();
       // short press without movement = tap -> flip the card 3D-style
       let upX = downX, upY = downY;
       if (e) {
@@ -663,12 +722,13 @@
     // 3D hover shine (when not dragging)
     card.addEventListener('mousemove', function (e) {
       if (isDragging) return;
+      if (performance.now() - lastTouchEnd < 600) return;
       const r = card.getBoundingClientRect();
       const mx = (e.clientX - r.left) / r.width - 0.5;
       const my = (e.clientY - r.top) / r.height - 0.5;
       const tiltY = mx * 20, tiltX = -my * 20;
       const rotZ = (cx - REST_X) * 0.025;
-      card.style.transform = `rotate(${rotZ}deg) perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+      card.style.transform = `rotate(${rotZ}deg) perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) rotateY(${spinY}deg)`;
       card.style.setProperty('--shine-x', (50 + mx * 60) + '%');
       card.style.setProperty('--shine-y', (50 + my * 60) + '%');
       card.style.boxShadow = `${-tiltY * 0.5}px ${tiltX * 0.5}px 40px rgba(0,0,0,0.6), 0 0 20px rgba(16,185,129,0.15)`;
@@ -676,7 +736,7 @@
     card.addEventListener('mouseleave', function () {
       if (isDragging) return;
       const rotZ = (cx - REST_X) * 0.025;
-      card.style.transform = `rotate(${rotZ}deg)`;
+      card.style.transform = `rotate(${rotZ}deg) rotateY(${spinY}deg)`;
       card.style.setProperty('--shine-x', '50%');
       card.style.setProperty('--shine-y', '30%');
       card.style.boxShadow = '';

@@ -868,15 +868,14 @@ body::after {
   transition: box-shadow 0.2s ease;
 }
 .id-card:active { cursor: grabbing; }
-/* 3D flip: inner spins, faces are its two sides */
+/* 3D flip: the spin now lives on .id-card itself (JS-driven spring) so the
+   canvas lanyard can follow the same angle and feel attached to the card */
 .id-card-inner {
   position: relative;
   width: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.75s cubic-bezier(0.3, 0.8, 0.3, 1);
 }
-.id-card.flipped .id-card-inner { transform: rotateY(180deg); }
 .id-card-face {
+  position: relative;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background: linear-gradient(160deg, #1e2d3d 0%, #0f1923 100%);
@@ -887,33 +886,67 @@ body::after {
   padding-bottom: 16px;
   overflow: hidden;
   box-sizing: border-box;
+  opacity: var(--face-opacity, 1);
 }
-.id-card-front { position: relative; }
 .id-card-back {
   position: absolute; inset: 0;
   transform: rotateY(180deg);
   justify-content: center;
 }
+/* the hole is only real on the front; on the back it stays visible so the
+   strap appears to pass over the card while it spins */
+.id-card-back .id-card-hole {
+  background: linear-gradient(135deg, #4a5a6a, #2a3745);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.id-card-back .id-card-clip { display: none; }
+/* light sweep across the face while the card spins */
+.id-card-face::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(110, 231, 183, 0.35) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  background-position: calc(var(--sweep-progress, 1) * 130%) 0;
+  opacity: var(--card-glow, 0);
+}
+/* soft emerald aura that breathes while the travelling glow runs */
+.id-card::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow: 0 0 26px rgba(16, 185, 129, 0.55), 0 0 60px rgba(16, 185, 129, 0.28);
+  opacity: var(--card-glow, 0);
+  z-index: 2;
+}
 .id-card-back-content {
   flex: 1; width: 100%;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 14px;
+  gap: 12px;
   padding: 8px 10px 16px;
 }
 .id-card-back-logo { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: #F1F5F9; line-height: 1; }
 .id-card-back-text { font-size: 0.58rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.14em; text-align: center; margin: 0; }
-.id-card-back-socials { display: flex; gap: 8px; }
-.id-card-back-socials a {
-  width: 34px; height: 34px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: #10B981; font-size: 0.9rem;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+.id-card-back-hint {
+  font-size: 0.8rem;
+  color: rgba(16, 185, 129, 0.65);
+  animation: cardHintPulse 2.4s ease-in-out infinite;
 }
-.id-card-back-socials a:hover { background: #10B981; color: #052e21; transform: translateY(-3px); }
+@keyframes cardHintPulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.12); }
+}
 @media (max-width: 768px) {
-  .id-card-back-socials a { width: 30px; height: 30px; font-size: 0.8rem; }
   .id-card-back-logo { font-size: 1.5rem; }
   .id-card-back-text { font-size: 0.52rem; letter-spacing: 0.1em; }
 }
