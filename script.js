@@ -631,16 +631,14 @@
       card.style.zIndex = '990';
       card.style.setProperty('--shine-x', (50 + tiltY * 2) + '%');
       card.style.setProperty('--shine-y', (50 - tiltX * 2) + '%');
-      // light sweep + edge glow while spinning (strongest near 90deg edge-on)
+      // edge glow boost while spinning (strongest near 90deg edge-on)
       const edge = Math.abs(Math.sin(spinRad));
-      card.style.setProperty('--sweep-progress', (1 - edge).toFixed(3));
-      card.style.setProperty('--face-opacity', Math.max(0.12, Math.abs(Math.cos(spinRad))).toFixed(3));
       card.style.setProperty('--card-glow', edge.toFixed(3));
       card.style.boxShadow = edge > 0.05
         ? `0 20px 60px rgba(0,0,0,0.6), 0 0 ${18 + edge * 44}px rgba(16,185,129,${0.28 * edge + glowActive * 0.25})`
         : (glowActive > 0.02
           ? `0 20px 60px rgba(0,0,0,0.6), 0 0 ${14 + glowActive * 26}px rgba(16,185,129,${0.3 * glowActive})`
-          : '');
+          : '0 20px 60px rgba(0,0,0,0.6), 0 0 32px rgba(16,185,129,0.20), 0 0 90px rgba(16,185,129,0.10)');
     }
 
     function loop() {
