@@ -474,9 +474,11 @@
     const card = document.getElementById('idCard');
     const scene = document.getElementById('lanyardScene');
     const lcanvas = document.getElementById('lanyardCanvas');
-    if (!card || !scene || !lcanvas) return;
+    const lcanvasFront = document.getElementById('lanyardCanvasFront');
+    if (!card || !scene || !lcanvas || !lcanvasFront) return;
 
     const ctx = lcanvas.getContext('2d');
+    const ctxF = lcanvasFront.getContext('2d');
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     let W, H, CARD_W, CARD_H, REST_X, REST_Y, offX = 0, offY = 0;
@@ -499,11 +501,14 @@
     const STIFF = 0.009, DAMP = 0.75, BOUNCE = 1.4;
 
     function resize() {
-      W = lcanvas.width = window.innerWidth * DPR;
-      H = lcanvas.height = window.innerHeight * DPR;
-      lcanvas.style.width = window.innerWidth + 'px';
-      lcanvas.style.height = window.innerHeight + 'px';
+      for (const cv of [lcanvas, lcanvasFront]) {
+        cv.width = window.innerWidth * DPR;
+        cv.height = window.innerHeight * DPR;
+        cv.style.width = window.innerWidth + 'px';
+        cv.style.height = window.innerHeight + 'px';
+      }
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctxF.setTransform(DPR, 0, 0, DPR, 0, 0);
       CARD_W = card.offsetWidth || 220;
       CARD_H = card.offsetHeight || 390;
       // pendulum pivot: the slot hole (top-center of the card). CSS rotate
@@ -532,9 +537,8 @@
       card.style.top = (cy - CARD_H / 2) + 'px';
     }
 
-    // Strap = V whose legs meet above the card, then ONE band continues
-    // down and threads through the slot; its tail hides behind the card
-    // (canvas sits below it), so nothing ever crosses the card face.
+    // Crossed strap: LEFT leg behind the card, RIGHT leg in front — both
+    // end inside the slot so they read as one strap through the hole.
     function drawStrapLeg(c, ax, ay2, ex, ey, sign) {
       // flip swing: anchor rocks sideways (bottom stays pinned to the slot)
       const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
@@ -568,26 +572,23 @@
 
     function drawLanyard() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      // everything pins to the card SLOT; the projected rect shrinks with
-      // the 3D spin, so the strap tracks the card mid-flip
+      ctxF.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      // both legs pin to the card SLOT; the projected rect shrinks with
+      // the 3D spin, so ends converge mid-plane mid-flip
       const holeRect = card.querySelector('.id-card-hole').getBoundingClientRect();
+      const hw = holeRect.width * 0.22; // ends a hair apart inside the hole
       const hx = holeRect.left + holeRect.width / 2;
       const hy = holeRect.top + holeRect.height / 2;
 
       const r = scene.getBoundingClientRect();
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
-      const sp = 34, ay = 64;
-      // legs merge well above the card (clamped so the junction never
-      // crosses the anchors when the card is dragged up)
-      const mergeY = Math.max(ay + 60, holeRect.top - 110);
+      // narrow anchors: tight V, left leg hugging close to the center line
+      const spL = 14, spR = 30, ay = 64;
 
-      // both legs meet at the junction above the card
-      drawStrapLeg(ctx, midX - sp, ay, hx, mergeY, -1);
-      drawStrapLeg(ctx, midX + sp, ay, hx, mergeY, 1);
-
-      // single band drops from the junction and threads the slot; the tail
-      // ends just below the hole, hidden behind the card body
-      drawStrapLeg(ctx, hx, mergeY, hx, hy + 10, 0);
+      // left leg -> BEHIND the card, dives into the slot
+      drawStrapLeg(ctx, midX - spL, ay, hx - hw, hy, -1);
+      // right leg -> in FRONT of the card, crosses the face, into the slot
+      drawStrapLeg(ctxF, midX + spR, ay, hx + hw, hy, 1);
     }
 
     function stepSpin() {
@@ -650,6 +651,7 @@
       const heroVisible = scene.getBoundingClientRect().bottom > 0 &&
                           scene.getBoundingClientRect().top < window.innerHeight;
       lcanvas.style.display = heroVisible ? '' : 'none';
+      lcanvasFront.style.display = heroVisible ? '' : 'none';
       card.style.display = heroVisible ? '' : 'none';
       stepSpin();
       if (heroVisible) { drawLanyard(); applyCard(); }

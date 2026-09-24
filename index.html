@@ -27,9 +27,11 @@
   <!-- SCROLL PROGRESS -->
   <div id="scrollProgress"></div>
   <!-- Canvas tali lanyard — fixed full screen -->
-  <!-- strap canvas (z-index in style.css) sits BELOW .hero-left so the
-       strap tail stays hidden behind the card -->
+  <!-- strap layers: back canvas (z:1) stays BELOW .hero-left (z:2) so its
+       leg dives behind the card; front canvas (z:992) crosses OVER the
+       card face — together they read as one strap through the slot -->
   <canvas id="lanyardCanvas" style="position:fixed;top:0;left:0;pointer-events:none;"></canvas>
+  <canvas id="lanyardCanvasFront" style="position:fixed;top:0;left:0;pointer-events:none;"></canvas>
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- NAV -->
