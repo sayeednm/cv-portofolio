@@ -858,7 +858,9 @@ body::after {
 
 /* ===== ID CARD LANYARD ===== */
 .lanyard-scene { position: relative; width: 340px; height: 640px; margin: 0 auto; flex-shrink: 0; overflow: visible; }  #lanyardCanvas, #lanyardCanvasFront { position: fixed; top: 0; left: 0; pointer-events: none; }
-  #lanyardCanvas { z-index: 989; }        /* behind the card (990) */
+  /* z 1 = below .hero-left (z 2) which contains the card; 989+ would win
+     against the transformed hero-left context and draw ABOVE the card */
+  #lanyardCanvas { z-index: 1; }
   #lanyardCanvasFront { z-index: 992; }   /* in front of the card */
 .id-card {
   position: absolute;
@@ -968,7 +970,9 @@ body::after {
 }
 .id-card-hole {
   width: 36px; height: 10px;
-  background: rgba(0, 0, 0, 0.7);
+  /* translucent slot: the strap ends tucked behind it stay slightly
+     visible, reading as thread-through instead of covered up */
+  background: rgba(0, 0, 0, 0.55);
   border-radius: 5px;
   margin-top: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);

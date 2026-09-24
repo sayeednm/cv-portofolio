@@ -27,11 +27,11 @@
   <!-- SCROLL PROGRESS -->
   <div id="scrollProgress"></div>
   <!-- Canvas tali lanyard — fixed full screen -->
-  <!-- back strap canvas sits BELOW the card (990): its leg dives into the slot;
-       front canvas sits ABOVE (992): its leg crosses over the card face and
-       also enters the slot -> the strap reads as threading through the hole -->
-  <canvas id="lanyardCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:989;"></canvas>
-  <canvas id="lanyardCanvasFront" style="position:fixed;top:0;left:0;pointer-events:none;z-index:992;"></canvas>
+  <!-- strap layers: z-index lives in style.css. Back canvas (z:1) must stay
+       BELOW .hero-left (z:2) because the card lives inside that stacking
+       context; front canvas (z:992) sits above everything -->
+  <canvas id="lanyardCanvas" style="position:fixed;top:0;left:0;pointer-events:none;"></canvas>
+  <canvas id="lanyardCanvasFront" style="position:fixed;top:0;left:0;pointer-events:none;"></canvas>
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- NAV -->
