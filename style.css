@@ -797,7 +797,95 @@ body::after {
 .glass-design-card .design-overlay { border-radius: inherit; }
 .video-caption { bottom: 50px; }
 @media (hover: none) {
-  .glass-design-card { transform: none !important; }
+  .design-grid:not(.dc-track) .glass-design-card { transform: none !important; }
+}
+
+/* ===== 3D COVERFLOW CAROUSEL (design section) ===== */
+.dc-stage {
+  --card-w: min(420px, 72vw);
+  position: relative;
+  padding: 14px 0 10px;
+  perspective: 1400px;
+  overflow: visible;
+}
+.dc-track {
+  display: flex !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+  align-items: center;
+  transform-style: preserve-3d;
+  transition: transform 0.65s var(--ease-out-expo);
+  will-change: transform;
+  cursor: grab;
+}
+.dc-track.dragging { cursor: grabbing; transition: none; }
+.dc-stage .design-card {
+  flex: 0 0 var(--card-w);
+  width: var(--card-w);
+  margin: 0 calc(var(--card-w) * 0.07);
+  transform: var(--dc-t, translateX(0));
+  transition: transform 0.65s var(--ease-out-expo), opacity 0.65s ease, filter 0.65s ease, box-shadow var(--transition), border-color var(--transition);
+}
+.dc-track .glass-design-card:hover { transform: var(--dc-t, translateX(0)); }
+.dc-stage .design-card[data-rel="0"] { --dc-t: translateX(0); opacity: 1; z-index: 10; }
+.dc-stage .design-card[data-rel="1"] {
+  --dc-t: translateX(calc(var(--card-w) * 1.02)) rotateY(-38deg) scale(0.85);
+  opacity: 0.45; filter: saturate(0.6) brightness(0.75); z-index: 5; pointer-events: none;
+}
+.dc-stage .design-card[data-rel="-1"] {
+  --dc-t: translateX(calc(var(--card-w) * -1.02)) rotateY(38deg) scale(0.85);
+  opacity: 0.45; filter: saturate(0.6) brightness(0.75); z-index: 5; pointer-events: none;
+}
+.dc-stage .design-card[data-rel="2"] {
+  --dc-t: translateX(calc(var(--card-w) * 1.85)) rotateY(-38deg) scale(0.7);
+  opacity: 0.14; filter: saturate(0.3) brightness(0.6); z-index: 2; pointer-events: none;
+}
+.dc-stage .design-card[data-rel="-2"] {
+  --dc-t: translateX(calc(var(--card-w) * -1.85)) rotateY(38deg) scale(0.7);
+  opacity: 0.14; filter: saturate(0.3) brightness(0.6); z-index: 2; pointer-events: none;
+}
+.dc-stage .design-card[data-rel="3"], .dc-stage .design-card[data-rel="-3"] {
+  opacity: 0; z-index: 1; pointer-events: none;
+}
+.dc-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 28px; }
+.dc-dots { display: flex; gap: 8px; align-items: center; }
+.dc-dot {
+  width: 8px; height: 8px; border-radius: 999px; border: none; padding: 0;
+  background: var(--border); cursor: pointer; transition: all var(--transition);
+}
+.dc-dot:hover { background: var(--text-light); }
+.dc-dot.active {
+  width: 26px; background: var(--cyan);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+.dc-btn {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg-card); color: var(--text);
+  cursor: pointer; font-size: 0.95rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.dc-btn:hover { background: var(--cyan); color: var(--dark); border-color: var(--cyan); transform: translateY(-2px); }
+.dc-btn:active { transform: scale(0.94); }
+.dc-hint {
+  text-align: center; margin-top: 16px;
+  font-size: 0.78rem; color: var(--text-light);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.dc-hint i { color: var(--cyan); }
+.dc-stage .design-card { overflow: hidden; }
+.dc-stage .design-card,
+.dc-stage .glass-design-card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(17, 24, 39, 0.55);
+  touch-action: pan-y;
+}
+.dc-stage .design-card img { pointer-events: none; -webkit-user-drag: none; user-select: none; }
+.dc-stage .design-card * { user-select: none; -webkit-user-drag: none; }
+.dc-btn:disabled { opacity: 0.35; pointer-events: none; }
+@media (hover: none) {
+  .dc-hint { display: none; }
 }
 
 /* ===== ABOUT PHOTO AUTO FADE ===== */
@@ -1126,6 +1214,8 @@ body::after {
   .skillbars-grid { grid-template-columns: 1fr; gap: 0; }
   .design-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .design-img-wrap { height: 160px; }
+  .dc-stage { --card-w: min(320px, 74vw); }
+  .dc-btn { width: 40px; height: 40px; }
   .glass-design-card .design-img-wrap { height: 250px; }
   .glass-design-card .design-name { font-size: 0.85rem; }
   .design-caption { left: 10px; right: 10px; bottom: 10px; padding: 11px 13px; border-radius: 13px; }
@@ -1163,6 +1253,7 @@ body::after {
   .about-photo-placeholder { width: 160px; height: 200px; }
   .design-grid { grid-template-columns: 1fr; }
   .design-img-wrap { height: 180px; }
+  .dc-stage { --card-w: 80vw; }
   .glass-design-card .design-img-wrap { height: 300px; }
   .glass-design-card .design-name { font-size: 0.9rem; }
   .hobbies-grid { grid-template-columns: 1fr; }

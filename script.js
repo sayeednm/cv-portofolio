@@ -352,18 +352,115 @@
     applyLang(currentLang);
   });
 
-  /* ================= GLASS CARD 3D TILT ================= */
-  if (canHover && !reducedMotion) {
-    document.querySelectorAll('.glass-design-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const nx = (e.clientX - r.left) / r.width - 0.5;
-        const ny = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `perspective(900px) rotateX(${(-ny * 7).toFixed(2)}deg) rotateY(${(nx * 9).toFixed(2)}deg) translateY(-6px)`;
-      }, { passive: true });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  /* ================= 3D COVERFLOW CAROUSEL ================= */
+  document.querySelectorAll('[data-carousel]').forEach(root => {
+    const stage = root.querySelector('.dc-stage');
+    const track = root.querySelector('.dc-track');
+    const cards = [...track.children];
+    const dotsWrap = root.querySelector('.dc-dots');
+    const prevBtn = root.querySelector('.dc-prev');
+    const nextBtn = root.querySelector('.dc-next');
+    if (!stage || !track || cards.length === 0) return;
+
+    let index = 0, pitch = 0, offset0 = 0, txBase = 0;
+    let dragging = false, startX = 0, startTx = 0, moved = 0;
+
+    cards.forEach((_, k) => {
+      const d = document.createElement('button');
+      d.className = 'dc-dot' + (k === 0 ? ' active' : '');
+      d.setAttribute('aria-label', (k + 1) + ' / ' + cards.length);
+      d.addEventListener('click', () => goTo(k));
+      dotsWrap.appendChild(d);
     });
-  }
+    const dots = [...dotsWrap.children];
+
+    function measure() {
+      cards.forEach(c => c.removeAttribute('data-rel'));
+      track.classList.add('dragging');
+      track.style.transform = 'translate3d(0,0,0)';
+      const r0 = cards[0].getBoundingClientRect();
+      const r1 = cards.length > 1 ? cards[1].getBoundingClientRect() : r0;
+      pitch = (r1.left - r0.left) || r0.width * 1.14;
+      const st = stage.getBoundingClientRect();
+      offset0 = (r0.left + r0.width / 2) - (st.left + st.width / 2);
+      txBase = -offset0;
+      void track.offsetWidth;
+      track.classList.remove('dragging');
+    }
+
+    function update(animate = true) {
+      cards.forEach((c, k) => {
+        const rel = k - index;
+        if (Math.abs(rel) <= 3) c.setAttribute('data-rel', String(rel));
+        else c.removeAttribute('data-rel');
+        c.style.transform = '';
+      });
+      txBase = -offset0 - index * pitch;
+      if (!animate) {
+        track.classList.add('dragging');
+        track.style.transform = 'translate3d(' + txBase + 'px,0,0)';
+        void track.offsetWidth;
+        track.classList.remove('dragging');
+      } else {
+        track.classList.remove('dragging');
+        track.style.transform = 'translate3d(' + txBase + 'px,0,0)';
+      }
+      dots.forEach((d, k) => d.classList.toggle('active', k === index));
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === cards.length - 1;
+    }
+
+    function goTo(i) {
+      index = Math.max(0, Math.min(cards.length - 1, i));
+      update(true);
+    }
+
+    prevBtn.addEventListener('click', () => goTo(index - 1));
+    nextBtn.addEventListener('click', () => goTo(index + 1));
+
+    track.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      dragging = true; moved = 0;
+      startX = e.clientX; startTx = txBase;
+      track.classList.add('dragging');
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      moved = e.clientX - startX;
+      track.style.transform = 'translate3d(' + (startTx + moved) + 'px,0,0)';
+    });
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      const step = Math.abs(moved) > 8
+        ? Math.max(-2, Math.min(2, Math.round(-moved / (pitch * 0.5)) || (moved < 0 ? 1 : -1)))
+        : 0;
+      goTo(index + step);
+    };
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+
+    // suppress accidental clicks on buttons right after a drag
+    track.addEventListener('click', e => {
+      if (Math.abs(moved) > 8) { e.preventDefault(); e.stopPropagation(); moved = 0; }
+    }, true);
+
+    stage.setAttribute('tabindex', '0');
+    stage.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(index - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(index + 1); }
+    });
+
+    let rT;
+    window.addEventListener('resize', () => {
+      clearTimeout(rT);
+      rT = setTimeout(() => { measure(); update(false); }, 150);
+    });
+
+    measure();
+    update(false);
+  });
 
   /* ================= ABOUT PHOTO SLIDESHOW ================= */
   const aboutSlides = document.querySelectorAll('.about-slide');

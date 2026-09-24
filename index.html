@@ -395,8 +395,10 @@
       <div class="design-sub-header reveal slide-left">
         <h3 class="design-sub-title"><i class="fa-solid fa-image"></i> <span data-i18n="design.photo.title">Desain Grafis</span></h3>
       </div>
-      <div class="design-grid" style="margin-bottom: 64px;">
-        <div class="design-card reveal glass-design-card spotlight-card">
+      <div class="design-carousel reveal" data-carousel style="margin-bottom: 64px;">
+        <div class="dc-stage">
+          <div class="design-grid dc-track">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/Desain.png" alt="Desain Grafis" />
             <span class="design-chip"><i class="fa-solid fa-pen-ruler"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -406,7 +408,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/Desain 2.png" alt="Desain Grafis 2" />
             <span class="design-chip"><i class="fa-solid fa-palette"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -416,7 +418,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/desain 3.png" alt="Desain Grafis 3" />
             <span class="design-chip"><i class="fa-solid fa-shapes"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -426,7 +428,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/ui ux.png" alt="UI UX" />
             <span class="design-chip"><i class="fa-solid fa-object-group"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -436,7 +438,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/UI-UX (1).png" alt="UI UX 1" />
             <span class="design-chip"><i class="fa-solid fa-mobile-screen"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -446,7 +448,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/UI-UX (2).png" alt="UI UX 2" />
             <span class="design-chip"><i class="fa-solid fa-layer-group"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -456,7 +458,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/website produk.png" alt="Website Produk" />
             <span class="design-chip"><i class="fa-solid fa-globe"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -466,7 +468,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card spotlight-card">
+        <div class="design-card glass-design-card spotlight-card">
           <div class="design-img-wrap"><img loading="lazy" src="images/website rentalps.png" alt="Website Rental PS" />
             <span class="design-chip"><i class="fa-solid fa-gamepad"></i></span>
             <div class="design-overlay"><button class="design-zoom" onclick="openLightbox(this)" aria-label="Perbesar"><i class="fa-solid fa-magnifying-glass-plus"></i></button></div>
@@ -477,13 +479,23 @@
           </div>
         </div>
       </div>
+        </div>
+      </div>
+      <div class="dc-controls">
+        <button class="dc-btn dc-prev" aria-label="Sebelumnya"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="dc-dots"></div>
+        <button class="dc-btn dc-next" aria-label="Berikutnya"><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+      <p class="dc-hint"><i class="fa-solid fa-arrows-left-right"></i> <span data-i18n="design.swipe">Geser untuk menjelajah</span></p>
 
       <!-- VIDEO -->
       <div class="design-sub-header reveal slide-left">
         <h3 class="design-sub-title"><i class="fa-solid fa-film"></i> <span data-i18n="design.video.title">Videografi</span></h3>
       </div>
-      <div class="design-grid">
-        <div class="design-card reveal glass-design-card video-card spotlight-card">
+      <div class="design-carousel reveal" data-carousel>
+        <div class="dc-stage">
+          <div class="design-grid dc-track">
+        <div class="design-card glass-design-card video-card spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/iBHO6N43Wfc/hqdefault.jpg" alt="Podcast" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/iBHO6N43Wfc')" aria-label="Putar video"><i class="fa-solid fa-play"></i></button></div>
@@ -494,7 +506,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card video-card spotlight-card">
+        <div class="design-card glass-design-card video-card spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/IJ0TuzQyXu8/hqdefault.jpg" alt="Company Profile" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/IJ0TuzQyXu8')" aria-label="Putar video"><i class="fa-solid fa-play"></i></button></div>
@@ -505,7 +517,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card video-card spotlight-card">
+        <div class="design-card glass-design-card video-card spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/u889SutiOJE/hqdefault.jpg" alt="Bumper Ramadhan" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/u889SutiOJE')" aria-label="Putar video"><i class="fa-solid fa-play"></i></button></div>
@@ -516,7 +528,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card video-card spotlight-card">
+        <div class="design-card glass-design-card video-card spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/y-hhqa1fFI0/hqdefault.jpg" alt="Motion Graphic" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/y-hhqa1fFI0')" aria-label="Putar video"><i class="fa-solid fa-play"></i></button></div>
@@ -527,7 +539,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card video-card spotlight-card">
+        <div class="design-card glass-design-card video-card spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/31ddkZkaAy8/hqdefault.jpg" alt="Iklan Layanan Masyarakat" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/31ddkZkaAy8')" aria-label="Putar video"><i class="fa-solid fa-play"></i></button></div>
@@ -538,7 +550,7 @@
             </div>
           </div>
         </div>
-        <div class="design-card reveal glass-design-card video-card spotlight-card">
+        <div class="design-card glass-design-card video-card spotlight-card">
           <div class="design-img-wrap video-thumb-wrap">
             <img loading="lazy" src="https://img.youtube.com/vi/CeFPZXHI970/hqdefault.jpg" alt="Iklan Produk" class="video-thumb" />
             <div class="design-overlay"><button class="design-zoom video-play-btn" onclick="openVideoModal('https://www.youtube.com/embed/CeFPZXHI970')" aria-label="Putar video"><i class="fa-solid fa-play"></i></button></div>
@@ -550,6 +562,14 @@
           </div>
         </div>
       </div>
+        </div>
+      </div>
+      <div class="dc-controls">
+        <button class="dc-btn dc-prev" aria-label="Sebelumnya"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="dc-dots"></div>
+        <button class="dc-btn dc-next" aria-label="Berikutnya"><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+      <p class="dc-hint"><i class="fa-solid fa-arrows-left-right"></i> <span data-i18n="design.swipe">Geser untuk menjelajah</span></p>
 
     </div>
   <!-- PROJECT PREVIEW MODAL -->
