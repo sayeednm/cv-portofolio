@@ -857,11 +857,11 @@ body::after {
 .video-modal-close:hover { background: #ef4444; }
 
 /* ===== ID CARD LANYARD ===== */
-.lanyard-scene { position: relative; width: 340px; height: 640px; margin: 0 auto; flex-shrink: 0; overflow: visible; }  #lanyardCanvas, #lanyardCanvasFront { position: fixed; top: 0; left: 0; pointer-events: none; }
-  /* z 1 = below .hero-left (z 2) which contains the card; 989+ would win
-     against the transformed hero-left context and draw ABOVE the card */
-  #lanyardCanvas { z-index: 1; }
-  #lanyardCanvasFront { z-index: 992; }   /* in front of the card */
+.lanyard-scene { position: relative; width: 340px; height: 640px; margin: 0 auto; flex-shrink: 0; overflow: visible; }  /* z 1 = below .hero-left (z 2) which contains the card; 989+ would win
+     against the transformed hero-left context and draw ABOVE the card.
+     Keeping the strap entirely behind it means its tail vanishes into the
+     slot naturally */
+  #lanyardCanvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
 .id-card {
   position: absolute;
   width: 220px;
