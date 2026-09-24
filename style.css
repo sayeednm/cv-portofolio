@@ -234,6 +234,11 @@ body::after {
   pointer-events: none;
 }
 .hero-left, .hero-right { position: relative; z-index: 1; }
+/* hero-left carries a transform (reveal), so it forms its own stacking
+   context; it must out-rank .hero-right or the dragged card renders
+   behind the hero text (same on mobile, since the card is fixed inside
+   this context) */
+.hero-left { z-index: 2; }
 .hero-left { flex: 0 0 auto; overflow: visible; }
 .hero-right { flex: 1; }
 

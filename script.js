@@ -545,12 +545,13 @@
       const sp = 28, ay = 64;
 
       [[midX - sp, ay], [midX + sp, ay]].forEach(([ax, ay2], side) => {
-        // flip swing: whole strap rocks around its anchor...
-        const swingA = Math.sin(spinY * Math.PI / 180) * 0.18;
+        // flip swing: whole strap rocks around its anchor (bottom stays
+        // pinned to the clip, so moving the anchor reads as a hard rock)...
+        const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
         const ex = hx + (side === 0 ? -hw : hw);
-        const axx = ax + Math.sin(swingA) * 30;
+        const axx = ax + Math.sin(swingA) * 34;
         // ...plus a whip bump that travels down while spinning
-        const whip = Math.max(-1, Math.min(1, spinV / 26)) * 14;
+        const whip = Math.max(-1, Math.min(1, spinV / 26)) * 34;
         const dx = ex - axx, dy = hy - ay2;
         const len = Math.sqrt(dx * dx + dy * dy);
         const sag = len * 0.18 + 12;
@@ -696,28 +697,10 @@
     window.addEventListener('resize', resize);
     setTimeout(() => { resize(); loop(); }, 200);
 
-    // 3D hover shine (when not dragging)
-    card.addEventListener('mousemove', function (e) {
-      if (isDragging) return;
-      if (performance.now() - lastTouchEnd < 600) return;
-      const r = card.getBoundingClientRect();
-      const mx = (e.clientX - r.left) / r.width - 0.5;
-      const my = (e.clientY - r.top) / r.height - 0.5;
-      const tiltY = mx * 20, tiltX = -my * 20;
-      const rotZ = (cx - REST_X) * 0.025;
-      card.style.transform = `rotate(${rotZ}deg) perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) rotateY(${spinY}deg)`;
-      card.style.setProperty('--shine-x', (50 + mx * 60) + '%');
-      card.style.setProperty('--shine-y', (50 + my * 60) + '%');
-      card.style.boxShadow = `${-tiltY * 0.5}px ${tiltX * 0.5}px 40px rgba(0,0,0,0.6), 0 0 20px rgba(16,185,129,0.15)`;
-    });
-    card.addEventListener('mouseleave', function () {
-      if (isDragging) return;
-      const rotZ = (cx - REST_X) * 0.025;
-      card.style.transform = `rotate(${rotZ}deg) rotateY(${spinY}deg)`;
-      card.style.setProperty('--shine-x', '50%');
-      card.style.setProperty('--shine-y', '30%');
-      card.style.boxShadow = '';
-    });
+    // NOTE: no hover-tilt here on purpose. Any hover handler that writes
+    // card.style.transform fights the rAF loop (applyCard) which rewrites the
+    // same property every frame -> transform flicker -> the clip bounces and
+    // the canvas strap vibrates.
   })();
 
   /* ================= EXPOSE GLOBALS (inline onclick handlers) ================= */
