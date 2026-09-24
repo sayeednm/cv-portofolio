@@ -511,6 +511,9 @@
       ctxF.setTransform(DPR, 0, 0, DPR, 0, 0);
       CARD_W = card.offsetWidth || 220;
       CARD_H = card.offsetHeight || 390;
+      // pendulum pivot: the slot hole (top-center of the card). CSS rotate
+      // now spins the card around its strap attachment point
+      card.style.transformOrigin = (CARD_W / 2) + 'px 18px';
       computeRest();
       if (cx === 0 && cy === 0) { cx = REST_X; cy = REST_Y; }
       placeAtRest();
@@ -560,13 +563,13 @@
       g.addColorStop(0.7, '#10B981');
       g.addColorStop(1, '#042b18');
       c.strokeStyle = g;
-      c.lineWidth = 11; c.lineCap = 'round'; c.stroke();
+      c.lineWidth = 16; c.lineCap = 'round'; c.stroke();
 
       c.beginPath();
       c.moveTo(axx, ay2);
       c.quadraticCurveTo(cpx, cpy, ex, ey);
       c.strokeStyle = 'rgba(255,255,255,0.16)';
-      c.lineWidth = 3; c.stroke();
+      c.lineWidth = 4; c.stroke();
     }
 
     function drawLanyard() {
@@ -575,7 +578,7 @@
       // both legs pin to the card SLOT; the projected rect shrinks with
       // the 3D spin, so ends converge mid-plane mid-flip
       const holeRect = card.querySelector('.id-card-hole').getBoundingClientRect();
-      const hw = holeRect.width * 0.18; // legs enter the slot nearly touching
+      const hw = holeRect.width * 0.32; // fat legs nearly fill the slot
       const hx = holeRect.left + holeRect.width / 2;
       const hy = holeRect.top + holeRect.height / 2;
 
@@ -610,7 +613,10 @@
       card.style.left = (cx - CARD_W / 2) + 'px';
       card.style.top = (cy - CARD_H / 2) + 'px';
 
-      const rotZ = (cx - REST_X) * 0.025;
+      // pendulum swing: with the pivot at the slot, the card aligns along
+      // the strap direction — pull right and the bottom trails right
+      // (positive CSS rotation moves the bottom tip LEFT, hence the minus)
+      const rotZ = Math.max(-16, Math.min(16, -(cx - REST_X) * 0.06));
       let tiltX = 0, tiltY = 0;
       if (isDragging) {
         tiltX = Math.max(-15, Math.min(15, -vy * 0.8));
