@@ -561,13 +561,13 @@
       g.addColorStop(0.7, '#10B981');
       g.addColorStop(1, '#042b18');
       c.strokeStyle = g;
-      c.lineWidth = 16; c.lineCap = 'round'; c.stroke();
+      c.lineWidth = 13; c.lineCap = 'round'; c.stroke();
 
       c.beginPath();
       c.moveTo(axx, ay2);
       c.quadraticCurveTo(cpx, cpy, ex, ey);
       c.strokeStyle = 'rgba(255,255,255,0.16)';
-      c.lineWidth = 4; c.stroke();
+      c.lineWidth = 3; c.stroke();
     }
 
     function drawLanyard() {
@@ -582,8 +582,8 @@
 
       const r = scene.getBoundingClientRect();
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
-      // narrow anchors: tight V, left leg hugging close to the center line
-      const spL = 14, spR = 30, ay = 64;
+      // wide anchors up top, tight ends at the slot: a real lanyard V
+      const spL = 36, spR = 54, ay = 64;
 
       // left leg -> BEHIND the card, dives into the slot
       drawStrapLeg(ctx, midX - spL, ay, hx - hw, hy, -1);
