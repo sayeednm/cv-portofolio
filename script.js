@@ -581,7 +581,7 @@
 
       const r = scene.getBoundingClientRect();
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
-      const sp = 22, ay = 64;
+      const sp = 34, ay = 64;
 
       // left leg -> behind the card, straight down into the slot
       drawStrapLeg(ctx, midX - sp, ay, hx - hw, hy, -1);

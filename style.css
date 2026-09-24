@@ -908,11 +908,12 @@ body::after {
   justify-content: center;
 }
 /* the hole is only real on the front; on the back it stays visible so the
-   strap appears to pass over the card while it spins */
+   strap appears to pass over the card while it spins — styled dark like the
+   front so the strap ends meeting inside it read the same on both faces */
 .id-card-back .id-card-hole {
-  background: linear-gradient(135deg, #4a5a6a, #2a3745);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 .id-card-back .id-card-clip { display: none; }
 /* light glow sweeping across the card face (always on, subtle) */
