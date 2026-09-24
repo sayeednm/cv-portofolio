@@ -246,12 +246,6 @@ body::after {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: 0.9rem; color: var(--text-light); margin-bottom: 16px;
 }
-.hero-tag::before {
-  content: '';
-  width: 36px; height: 1px;
-  background: var(--accent-grad);
-  display: inline-block;
-}
 .hero-title {
   font-size: clamp(2.2rem, 4vw, 3.5rem);
   font-weight: 900; color: var(--text-bright);
