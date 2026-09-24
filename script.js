@@ -534,10 +534,8 @@
       card.style.top = (cy - CARD_H / 2) + 'px';
     }
 
-    // One strap, two layers: the LEFT leg is drawn behind the card and
-    // dives straight into the slot; the RIGHT leg is drawn in front of the
-    // card, crossing over the top edge before entering the slot. Together
-    // they read as a single strap threading through the hole.
+    // Two legs drawn on the BACK canvas; they meet above the card where
+    // canvas-drawn metal hardware (ring + swivel hook) takes over.
     function drawStrapLeg(c, ax, ay2, ex, ey, sign) {
       // flip swing: anchor rocks sideways (bottom stays pinned to the slot)
       const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
@@ -569,11 +567,56 @@
       c.lineWidth = 3; c.stroke();
     }
 
+    // metal hardware under the strap: a short stub, an O-ring and a
+    // swivel hook whose nose dips into the card slot (like the reference)
+    function drawMetal(c, hx, topY, slotY) {
+      const stubEnd = topY + 24;
+      // stub strap linking the joined legs to the ring
+      c.beginPath();
+      c.moveTo(hx, topY - 2);
+      c.lineTo(hx, stubEnd);
+      c.strokeStyle = '#0b3f26';
+      c.lineWidth = 10; c.lineCap = 'round'; c.stroke();
+
+      const ringCy = stubEnd + 15, ringR = 13;
+      // O-ring with a metallic horizontal sheen
+      const rg = c.createLinearGradient(hx - ringR, 0, hx + ringR, 0);
+      rg.addColorStop(0, '#7d8a95');
+      rg.addColorStop(0.35, '#e8eef4');
+      rg.addColorStop(0.6, '#9fb0bd');
+      rg.addColorStop(1, '#5b6873');
+      c.beginPath();
+      c.arc(hx, ringCy, ringR, 0, Math.PI * 2);
+      c.strokeStyle = rg; c.lineWidth = 5; c.stroke();
+      // thin outer highlight so the ring pops off the dark bg
+      c.beginPath();
+      c.arc(hx, ringCy, ringR + 2.5, 0, Math.PI * 2);
+      c.strokeStyle = 'rgba(255,255,255,0.18)'; c.lineWidth = 1; c.stroke();
+
+      // swivel hook: neck from the ring bottom, then a curve that dips
+      // into the slot with its nose curling back up inside the hole
+      const neckY = ringCy + ringR - 2;
+      const sg = c.createLinearGradient(hx - 8, 0, hx + 10, 0);
+      sg.addColorStop(0, '#98a6b3');
+      sg.addColorStop(0.4, '#eef4fa');
+      sg.addColorStop(0.7, '#aab8c4');
+      sg.addColorStop(1, '#65727d');
+      c.beginPath();
+      c.moveTo(hx, neckY);
+      c.quadraticCurveTo(hx + 1, slotY - 14, hx + 4, slotY - 2);
+      c.quadraticCurveTo(hx + 5, slotY + 4, hx - 1, slotY - 1);
+      c.strokeStyle = sg; c.lineWidth = 4.5; c.lineCap = 'round'; c.stroke();
+      // pivot dot where ring meets hook
+      c.beginPath();
+      c.arc(hx, neckY + 1, 3.5, 0, Math.PI * 2);
+      c.fillStyle = '#dfe7ee'; c.fill();
+    }
+
     function drawLanyard() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctxF.clearRect(0, 0, window.innerWidth, window.innerHeight);
       // everything pins to the card SLOT; the projected rect shrinks with
-      // the 3D spin so the junction tracks the card mid-flip
+      // the 3D spin so the hardware tracks the card mid-flip
       const holeRect = card.querySelector('.id-card-hole').getBoundingClientRect();
       const hx = holeRect.left + holeRect.width / 2;
       const hy = holeRect.top + holeRect.height / 2;
@@ -581,18 +624,16 @@
       const r = scene.getBoundingClientRect();
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
       const sp = 26, ay = 64;
-      // legs merge well above the card so the V stays long and elegant
+      // legs merge well above the card, leaving room for the metal hardware
       // (clamped so the junction never crosses the anchors when dragged up)
-      const mergeY = Math.max(ay + 60, holeRect.top - 110);
+      const mergeY = Math.max(ay + 60, holeRect.top - 150);
 
       // both legs on the BACK canvas, meeting at the junction point
       drawStrapLeg(ctx, midX - sp, ay, hx, mergeY, -1);
       drawStrapLeg(ctx, midX + sp, ay, hx, mergeY, 1);
 
-      // single strap drops from the junction, crosses the card's top edge
-      // and plugs into the slot — its end fills the hole like the reference,
-      // no slot redraw needed (that read as a doubled hole)
-      drawStrapLeg(ctxF, hx, mergeY, hx, hy + 1, 0);
+      // front canvas: stub + O-ring + swivel hook dipping into the slot
+      drawMetal(ctxF, hx, mergeY, hy);
     }
 
     function stepSpin() {
