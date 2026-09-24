@@ -27,8 +27,11 @@
   <!-- SCROLL PROGRESS -->
   <div id="scrollProgress"></div>
   <!-- Canvas tali lanyard — fixed full screen -->
-  <!-- strap canvas sits BELOW the card (990) so the clip visually grips the strap -->
+  <!-- back strap canvas sits BELOW the card (990): its leg dives into the slot;
+       front canvas sits ABOVE (992): its leg crosses over the card face and
+       also enters the slot -> the strap reads as threading through the hole -->
   <canvas id="lanyardCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:989;"></canvas>
+  <canvas id="lanyardCanvasFront" style="position:fixed;top:0;left:0;pointer-events:none;z-index:992;"></canvas>
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- NAV -->

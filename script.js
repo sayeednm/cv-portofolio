@@ -474,9 +474,11 @@
     const card = document.getElementById('idCard');
     const scene = document.getElementById('lanyardScene');
     const lcanvas = document.getElementById('lanyardCanvas');
-    if (!card || !scene || !lcanvas) return;
+    const lcanvasFront = document.getElementById('lanyardCanvasFront');
+    if (!card || !scene || !lcanvas || !lcanvasFront) return;
 
     const ctx = lcanvas.getContext('2d');
+    const ctxF = lcanvasFront.getContext('2d');
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     let W, H, CARD_W, CARD_H, REST_X, REST_Y, offX = 0, offY = 0;
@@ -499,11 +501,14 @@
     const STIFF = 0.009, DAMP = 0.75, BOUNCE = 1.4;
 
     function resize() {
-      W = lcanvas.width = window.innerWidth * DPR;
-      H = lcanvas.height = window.innerHeight * DPR;
-      lcanvas.style.width = window.innerWidth + 'px';
-      lcanvas.style.height = window.innerHeight + 'px';
+      for (const cv of [lcanvas, lcanvasFront]) {
+        cv.width = window.innerWidth * DPR;
+        cv.height = window.innerHeight * DPR;
+        cv.style.width = window.innerWidth + 'px';
+        cv.style.height = window.innerHeight + 'px';
+      }
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctxF.setTransform(DPR, 0, 0, DPR, 0, 0);
       CARD_W = card.offsetWidth || 220;
       CARD_H = card.offsetHeight || 390;
       computeRest();
@@ -529,11 +534,45 @@
       card.style.top = (cy - CARD_H / 2) + 'px';
     }
 
+    // One strap, two layers: the LEFT leg is drawn behind the card and
+    // dives straight into the slot; the RIGHT leg is drawn in front of the
+    // card, crossing over the top edge before entering the slot. Together
+    // they read as a single strap threading through the hole.
+    function drawStrapLeg(c, ax, ay2, ex, ey, sign) {
+      // flip swing: anchor rocks sideways (bottom stays pinned to the slot)
+      const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
+      const axx = ax + Math.sin(swingA) * 34;
+      // ...plus a whip bump that travels down while spinning
+      const whip = Math.max(-1, Math.min(1, spinV / 26)) * 34;
+      const dx = ex - axx, dy = ey - ay2;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const sag = len * 0.06 + 4; // taut strap
+      const cpx = (axx + ex) / 2 + whip * sign;
+      const cpy = (ay2 + ey) / 2 + sag;
+
+      c.beginPath();
+      c.moveTo(axx, ay2);
+      c.quadraticCurveTo(cpx, cpy, ex, ey);
+      const g = c.createLinearGradient(axx, ay2, ex, ey);
+      g.addColorStop(0, '#042b18');
+      g.addColorStop(0.3, '#10B981');
+      g.addColorStop(0.5, '#34D399');
+      g.addColorStop(0.7, '#10B981');
+      g.addColorStop(1, '#042b18');
+      c.strokeStyle = g;
+      c.lineWidth = 11; c.lineCap = 'round'; c.stroke();
+
+      c.beginPath();
+      c.moveTo(axx, ay2);
+      c.quadraticCurveTo(cpx, cpy, ex, ey);
+      c.strokeStyle = 'rgba(255,255,255,0.16)';
+      c.lineWidth = 3; c.stroke();
+    }
+
     function drawLanyard() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      // strap ends are pinned to the card SLOT (the translucent hole), not
-      // the metal clip: they pass behind the clip and vanish into the slot,
-      // so the badge reads as actually wearing the lanyard. The bounding
+      ctxF.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      // both legs pin to the card SLOT (the translucent hole). Bounding
       // rect shrinks with the 3D spin, so ends converge mid-plane mid-flip.
       const holeRect = card.querySelector('.id-card-hole').getBoundingClientRect();
       const hw = holeRect.width * 0.18; // legs enter the slot nearly touching
@@ -544,40 +583,10 @@
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
       const sp = 22, ay = 64;
 
-      [[midX - sp, ay], [midX + sp, ay]].forEach(([ax, ay2], side) => {
-        // flip swing: whole strap rocks around its anchor (bottom stays
-        // pinned to the clip, so moving the anchor reads as a hard rock)...
-        const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
-        // ends sit just inside the slot edges, a hair apart like a real strap
-        const ex = hx + (side === 0 ? -hw : hw);
-        const axx = ax + Math.sin(swingA) * 34;
-        // ...plus a whip bump that travels down while spinning
-        const whip = Math.max(-1, Math.min(1, spinV / 26)) * 34;
-        const dx = ex - axx, dy = hy - ay2;
-        const len = Math.sqrt(dx * dx + dy * dy);
-        // low sag -> the strap reads taut, clipped to the card
-        const sag = len * 0.06 + 4;
-        const cpx = (axx + ex) / 2 + whip * (side === 0 ? -1 : 1);
-        const cpy = (ay2 + hy) / 2 + sag;
-
-        ctx.beginPath();
-        ctx.moveTo(axx, ay2);
-        ctx.quadraticCurveTo(cpx, cpy, ex, hy);
-        const g = ctx.createLinearGradient(axx, ay2, ex, hy);
-        g.addColorStop(0, '#042b18');
-        g.addColorStop(0.3, '#10B981');
-        g.addColorStop(0.5, '#34D399');
-        g.addColorStop(0.7, '#10B981');
-        g.addColorStop(1, '#042b18');
-        ctx.strokeStyle = g;
-        ctx.lineWidth = 11; ctx.lineCap = 'round'; ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(axx, ay2);
-        ctx.quadraticCurveTo(cpx, cpy, ex, hy);
-        ctx.strokeStyle = 'rgba(255,255,255,0.16)';
-        ctx.lineWidth = 3; ctx.stroke();
-      });
+      // left leg -> behind the card, straight down into the slot
+      drawStrapLeg(ctx, midX - sp, ay, hx - hw, hy, -1);
+      // right leg -> in FRONT of the card, over the top edge, into the slot
+      drawStrapLeg(ctxF, midX + sp, ay, hx + hw, hy, 1);
     }
 
     function stepSpin() {
@@ -637,6 +646,7 @@
       const heroVisible = scene.getBoundingClientRect().bottom > 0 &&
                           scene.getBoundingClientRect().top < window.innerHeight;
       lcanvas.style.display = heroVisible ? '' : 'none';
+      lcanvasFront.style.display = heroVisible ? '' : 'none';
       card.style.display = heroVisible ? '' : 'none';
       stepSpin();
       if (heroVisible) { drawLanyard(); applyCard(); }
