@@ -352,6 +352,19 @@
     applyLang(currentLang);
   });
 
+  /* ================= GLASS CARD 3D TILT ================= */
+  if (canHover && !reducedMotion) {
+    document.querySelectorAll('.glass-design-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const nx = (e.clientX - r.left) / r.width - 0.5;
+        const ny = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(900px) rotateX(${(-ny * 7).toFixed(2)}deg) rotateY(${(nx * 9).toFixed(2)}deg) translateY(-6px)`;
+      }, { passive: true });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
   /* ================= ABOUT PHOTO SLIDESHOW ================= */
   const aboutSlides = document.querySelectorAll('.about-slide');
   if (aboutSlides.length > 1) {

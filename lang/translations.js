@@ -68,7 +68,14 @@ const TRANSLATIONS = {
     "design.filter.all": "All", "design.filter.social": "Social Media", "design.filter.poster": "Poster",
     "design.filter.brand": "Branding", "design.filter.competition": "Competition",
     "design.item.1": "Instagram Feed — School Organization", "design.item.2": "Event Announcement Post",
-    "design.item.3": "School Event Poster", "design.item.4": "Graphic Design Competition Entry", "design.item.6": "Infographic Poster"
+    "design.item.3": "School Event Poster", "design.item.4": "Graphic Design Competition Entry", "design.item.6": "Infographic Poster",
+    "design.cat.graphic": "Graphic Design", "design.cat.social": "Social Media", "design.cat.uiux": "UI/UX",
+    "design.cat.web": "Web Design", "design.cat.videography": "Videography", "design.cat.motion": "Motion Graphic", "design.cat.ads": "Advertisement",
+    "design.item.g1": "Desain Grafis", "design.item.g2": "Desain Grafis 2", "design.item.g3": "Desain Grafis 3",
+    "design.item.g4": "UI/UX Design", "design.item.g5": "UI/UX Design 2", "design.item.g6": "UI/UX Design 3",
+    "design.item.g7": "Website Produk", "design.item.g8": "Website Rental PS",
+    "design.item.v1": "Podcast", "design.item.v2": "Company Profile", "design.item.v3": "Bumper Ramadhan — After Effects",
+    "design.item.v4": "Motion Graphic — After Effects", "design.item.v5": "Iklan Layanan Masyarakat", "design.item.v6": "Iklan Produk"
   },
   id: {
     "nav.about": "Tentang", "nav.education": "Pendidikan", "nav.experience": "Pengalaman",
@@ -139,6 +146,13 @@ const TRANSLATIONS = {
     "design.filter.all": "Semua", "design.filter.social": "Media Sosial", "design.filter.poster": "Poster",
     "design.filter.brand": "Branding", "design.filter.competition": "Lomba",
     "design.item.1": "Feed Instagram — Organisasi Sekolah", "design.item.2": "Postingan Pengumuman Acara",
-    "design.item.3": "Poster Acara Sekolah", "design.item.4": "Karya Lomba Desain Grafis", "design.item.6": "Poster Infografis"
+    "design.item.3": "Poster Acara Sekolah", "design.item.4": "Karya Lomba Desain Grafis", "design.item.6": "Poster Infografis",
+    "design.cat.graphic": "Desain Grafis", "design.cat.social": "Media Sosial", "design.cat.uiux": "UI/UX",
+    "design.cat.web": "Web Design", "design.cat.videography": "Videografi", "design.cat.motion": "Motion Graphic", "design.cat.ads": "Iklan",
+    "design.item.g1": "Desain Grafis", "design.item.g2": "Desain Grafis 2", "design.item.g3": "Desain Grafis 3",
+    "design.item.g4": "UI/UX Design", "design.item.g5": "UI/UX Design 2", "design.item.g6": "UI/UX Design 3",
+    "design.item.g7": "Website Produk", "design.item.g8": "Website Rental PS",
+    "design.item.v1": "Podcast", "design.item.v2": "Company Profile", "design.item.v3": "Bumper Ramadhan — After Effects",
+    "design.item.v4": "Motion Graphic — After Effects", "design.item.v5": "Iklan Layanan Masyarakat", "design.item.v6": "Iklan Produk"
   }
 };
