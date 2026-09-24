@@ -487,7 +487,7 @@
 
     // ---- flip: JS-driven spring so the lanyard can follow the spin ----
     let flipped = false, spinY = 0, spinV = 0, spinRest = 0, spinActive = false;
-    let glowT = 0, glowActive = 0; // travelling glow along the strap
+    let glowActive = 0; // card glow boost while flipping
 
     function flipCard() {
       flipped = !flipped;
@@ -574,31 +574,10 @@
         ctx.quadraticCurveTo(cpx, cpy, ex, hy);
         ctx.strokeStyle = 'rgba(255,255,255,0.16)';
         ctx.lineWidth = 3; ctx.stroke();
-
-        // travelling glow pulse along the strap (anchor -> card),
-        // always on at low intensity, brighter during a flip
-        const intensity = 0.4 + 0.6 * glowActive;
-        for (let i = 0; i < 2; i++) {
-          const t = (glowT * 0.9 + i * 0.5) % 1;
-          // quadratic bezier point at t
-          const gx = (1 - t) * (1 - t) * axx + 2 * (1 - t) * t * cpx + t * t * ex;
-          const gy = (1 - t) * (1 - t) * ay2 + 2 * (1 - t) * t * cpy + t * t * hy;
-          const fade = Math.sin(t * Math.PI); // fade in/out at both ends
-          const rad = 20 * fade;
-          if (rad > 0.5) {
-            const rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, rad);
-            rg.addColorStop(0, `rgba(110,231,183,${0.5 * intensity * fade})`);
-            rg.addColorStop(0.5, `rgba(52,211,153,${0.22 * intensity * fade})`);
-            rg.addColorStop(1, 'rgba(16,185,129,0)');
-            ctx.fillStyle = rg;
-            ctx.beginPath(); ctx.arc(gx, gy, rad, 0, Math.PI * 2); ctx.fill();
-          }
-        }
       });
     }
 
     function stepSpin() {
-      glowT += 0.016;
       if (glowActive > 0) glowActive = Math.max(0, glowActive - 0.006); // fade after flip
       if (!spinActive) return;
       const dist = spinRest - spinY;

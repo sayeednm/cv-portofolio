@@ -865,14 +865,21 @@ body::after {
   user-select: none;
   will-change: left, top, transform;
   perspective: 900px;
+  /* required so the spin propagates into the faces as real 3D; without it the
+     subtree is flattened and the flip shows a mirrored front face instead of
+     revealing the back face */
+  transform-style: preserve-3d;
   transition: box-shadow 0.2s ease;
 }
 .id-card:active { cursor: grabbing; }
 /* 3D flip: the spin now lives on .id-card itself (JS-driven spring) so the
-   canvas lanyard can follow the same angle and feel attached to the card */
+   canvas lanyard can follow the same angle and feel attached to the card.
+   preserve-3d on both .id-card and .id-card-inner is what makes
+   backface-visibility work, so the back face shows on a real 360 spin */
 .id-card-inner {
   position: relative;
   width: 100%;
+  transform-style: preserve-3d;
 }
 .id-card-face {
   position: relative;
