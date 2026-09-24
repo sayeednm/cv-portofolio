@@ -531,26 +531,25 @@
 
     function drawLanyard() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      const clip = card.querySelector('.id-card-clip');
-      const clipEl = clip ? clip : card.querySelector('.id-card-hole');
-      const clipRect = clipEl.getBoundingClientRect();
-      // bounding rect already shrinks with the 3D spin, so the strap end
-      // naturally converges to the clip's mid-plane while flipping
-      const hw = clipRect.width / 2;
-      const hx = clipRect.left + clipRect.width / 2;
-      const hy = clipRect.top + clipRect.height / 2;
+      // strap ends are pinned to the card SLOT (the translucent hole), not
+      // the metal clip: they pass behind the clip and vanish into the slot,
+      // so the badge reads as actually wearing the lanyard. The bounding
+      // rect shrinks with the 3D spin, so ends converge mid-plane mid-flip.
+      const holeRect = card.querySelector('.id-card-hole').getBoundingClientRect();
+      const hw = holeRect.width * 0.18; // legs enter the slot nearly touching
+      const hx = holeRect.left + holeRect.width / 2;
+      const hy = holeRect.top + holeRect.height / 2;
 
       const r = scene.getBoundingClientRect();
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
-      const sp = 28, ay = 64;
+      const sp = 22, ay = 64;
 
       [[midX - sp, ay], [midX + sp, ay]].forEach(([ax, ay2], side) => {
         // flip swing: whole strap rocks around its anchor (bottom stays
         // pinned to the clip, so moving the anchor reads as a hard rock)...
         const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
-        // strap end tucks INTO the clip (not at its edge) so the metal
-        // clamp visually grips the strap
-        const ex = hx + (side === 0 ? -hw : hw) * 0.55;
+        // ends sit just inside the slot edges, a hair apart like a real strap
+        const ex = hx + (side === 0 ? -hw : hw);
         const axx = ax + Math.sin(swingA) * 34;
         // ...plus a whip bump that travels down while spinning
         const whip = Math.max(-1, Math.min(1, spinV / 26)) * 34;
