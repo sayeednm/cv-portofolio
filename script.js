@@ -569,29 +569,6 @@
       c.lineWidth = 3; c.stroke();
     }
 
-    // redraw the slot pill on the front canvas so the strap end that
-    // reaches it is occluded -> reads as the strap entering the hole
-    function drawSlotCap(c, rct) {
-      const rr = rct.height / 2;
-      c.save();
-      c.beginPath();
-      c.moveTo(rct.left + rr, rct.top);
-      c.arcTo(rct.left + rct.width, rct.top, rct.left + rct.width, rct.top + rct.height, rr);
-      c.arcTo(rct.left + rct.width, rct.top + rct.height, rct.left, rct.top + rct.height, rr);
-      c.arcTo(rct.left, rct.top + rct.height, rct.left, rct.top, rr);
-      c.arcTo(rct.left, rct.top, rct.left + rct.width, rct.top, rr);
-      c.closePath();
-      const g = c.createLinearGradient(0, rct.top, 0, rct.top + rct.height);
-      g.addColorStop(0, 'rgba(8,12,16,0.95)');
-      g.addColorStop(1, 'rgba(1,4,7,0.95)');
-      c.fillStyle = g;
-      c.fill();
-      c.strokeStyle = 'rgba(255,255,255,0.10)';
-      c.lineWidth = 1;
-      c.stroke();
-      c.restore();
-    }
-
     function drawLanyard() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctxF.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -604,19 +581,18 @@
       const r = scene.getBoundingClientRect();
       const midX = window.innerWidth < 768 ? window.innerWidth / 2 : r.left + r.width / 2;
       const sp = 26, ay = 64;
-      // legs merge into one a little above the card's top edge
-      const mergeY = holeRect.top - 26;
+      // legs merge well above the card so the V stays long and elegant
+      // (clamped so the junction never crosses the anchors when dragged up)
+      const mergeY = Math.max(ay + 60, holeRect.top - 110);
 
-      // both legs on the BACK canvas, meeting above the card
+      // both legs on the BACK canvas, meeting at the junction point
       drawStrapLeg(ctx, midX - sp, ay, hx, mergeY, -1);
       drawStrapLeg(ctx, midX + sp, ay, hx, mergeY, 1);
 
-      // single strap continues over the front of the card into the slot
-      // (end kept inside the pill so the round cap stays hidden under it)
-      drawStrapLeg(ctxF, hx, mergeY, hx, hy - 1, 0);
-
-      // slot pill redrawn on top: the strap end slips underneath it
-      drawSlotCap(ctxF, holeRect);
+      // single strap drops from the junction, crosses the card's top edge
+      // and plugs into the slot — its end fills the hole like the reference,
+      // no slot redraw needed (that read as a doubled hole)
+      drawStrapLeg(ctxF, hx, mergeY, hx, hy + 1, 0);
     }
 
     function stepSpin() {
