@@ -857,8 +857,7 @@ body::after {
 .video-modal-close:hover { background: #ef4444; }
 
 /* ===== ID CARD LANYARD ===== */
-.lanyard-scene { position: relative; width: 340px; height: 640px; margin: 0 auto; flex-shrink: 0; overflow: visible; }
-#lanyardCanvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 996; }
+.lanyard-scene { position: relative; width: 340px; height: 640px; margin: 0 auto; flex-shrink: 0; overflow: visible; }  #lanyardCanvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 989; }
 .id-card {
   position: absolute;
   width: 220px;

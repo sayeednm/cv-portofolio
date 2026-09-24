@@ -548,13 +548,16 @@
         // flip swing: whole strap rocks around its anchor (bottom stays
         // pinned to the clip, so moving the anchor reads as a hard rock)...
         const swingA = Math.sin(spinY * Math.PI / 180) * 0.4;
-        const ex = hx + (side === 0 ? -hw : hw);
+        // strap end tucks INTO the clip (not at its edge) so the metal
+        // clamp visually grips the strap
+        const ex = hx + (side === 0 ? -hw : hw) * 0.55;
         const axx = ax + Math.sin(swingA) * 34;
         // ...plus a whip bump that travels down while spinning
         const whip = Math.max(-1, Math.min(1, spinV / 26)) * 34;
         const dx = ex - axx, dy = hy - ay2;
         const len = Math.sqrt(dx * dx + dy * dy);
-        const sag = len * 0.18 + 12;
+        // low sag -> the strap reads taut, clipped to the card
+        const sag = len * 0.06 + 4;
         const cpx = (axx + ex) / 2 + whip * (side === 0 ? -1 : 1);
         const cpy = (ay2 + hy) / 2 + sag;
 
