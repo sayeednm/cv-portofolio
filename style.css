@@ -737,9 +737,9 @@ body::after {
 
 /* ===== GLASSMORPHIC DESIGN CARD ===== */
 .dc-stage .glass-design-card {
-  border-radius: 30px;
+  border-radius: 24px;
   background: #0b1220;
-  border: 6px solid rgba(255, 255, 255, 0.92);
+  border: 5px solid rgba(255, 255, 255, 0.92);
   box-shadow:
     0 30px 60px -22px rgba(0, 0, 0, 0.6),
     0 10px 24px -14px rgba(0, 0, 0, 0.5);
@@ -769,6 +769,11 @@ body::after {
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 .dc-stage .glass-design-card .design-img-wrap { height: 100%; }
+/* caption & chip scaled for the uniform 250x333 frame */
+.dc-stage .design-caption { left: 12px; right: 12px; bottom: 12px; padding: 11px 14px; border-radius: 14px; }
+.dc-stage .design-chip { width: 40px; height: 40px; top: 12px; left: 12px; border-radius: 12px; font-size: 0.95rem; }
+.dc-stage .glass-design-card .design-name { font-size: 0.95rem; }
+.dc-stage .video-caption { bottom: 46px; }
 .glass-design-card .design-img-wrap { height: 340px; border-radius: inherit; }
 .glass-design-card .design-img-wrap img { border-radius: inherit; }
 .design-chip {
@@ -830,8 +835,10 @@ body::after {
   position: absolute;
   left: 50%; top: 50%;
   width: var(--card-w);
+  height: var(--card-h); /* explicit box: every card identical regardless of image ratio */
   margin: 0;
   transform-origin: center center;
+  backface-visibility: hidden; /* no mirrored content while orbiting */
   transition: transform 0.6s var(--ease-out-expo), opacity 0.6s ease, filter 0.6s ease, visibility 0.6s, border-color var(--transition), box-shadow 0.6s ease;
 }
 .dc-stage .design-card[data-rel="0"] { opacity: 1; }
