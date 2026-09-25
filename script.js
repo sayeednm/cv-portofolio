@@ -381,38 +381,41 @@
     });
     const dots = [...dotsWrap.children];
 
-    const RADIUS = 280;                                          // cylinder radius (px)
-    const SLOT = 82 * Math.PI / 180;                             // degrees per card
-    const ARC = RADIUS * SLOT;                                   // px of drag per card
+    // Visual ring: adjacent slots SPREAD px apart. A card leaving the center
+    // spins edge-on (~72deg) and recedes — reading as swinging around the
+    // back — then fades out. NOTE: a strict cylinder (N*slot=360deg) is
+    // impossible with 8 cards and wide slots; it bunched cards together.
+    const SPREAD = 300;                                          // px per slot
     // blur/grayscale look great on desktop but cost paint time on phones
     const FX = !isMobile && !reducedMotion;
 
     function place() {
       cards.forEach((c, k) => {
         let rel = mod(k - index, N);
-        if (rel > N / 2) rel -= N; // signed shortest ring distance
-        // Each card owns a slot on a cylinder. Dragging spins the cylinder,
-        // so the pulled card travels sideways and then AROUND THE BACK of
-        // the front one — a true orbit, like the reference tunnel.
-        const angle = (rel + dragOffset / (ARC * 0.55)) * SLOT;
-        const cos = Math.cos(angle), sin = Math.sin(angle);
-        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(rel + dragOffset / (ARC * 0.55))))));
-        c.style.zIndex = String(Math.round(200 + cos * 100)); // front card on top
-        c.style.visibility = cos < -0.2 ? 'hidden' : '';
-        // front card full, sides faint, back fading out before the backface
-        const op = cos >= 0.2 ? 0.55 + 0.45 * cos : Math.max(0, (cos + 0.35) * 0.85);
+        if (rel > N / 2) rel -= N;      // signed shortest ring distance
+        if (N % 2 === 0 && rel === N / 2) rel = -N / 2; // break the tie one way
+        // fractional position: dragging slides cards continuously through
+        // slots — a card leaving the center spins edge-on and recedes,
+        // reading as swinging around the back of the front card
+        const t = rel + dragOffset / SPREAD;
+        const at = Math.abs(t);
+        const cl = Math.min(at, 1);            // 0 front → 1 edge-on
+        const dir = t < 0 ? -1 : 1;
+        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
+        c.style.zIndex = String(20 - Math.round(Math.min(at, 3) * 5));
+        c.style.visibility = at > 1.9 ? 'hidden' : '';
+        const rot = -dir * cl * 72;                    // spin to the back
+        const z = -cl * 260;                           // recede behind front
+        const x = t * SPREAD * (1 - 0.25 * cl);        // bunch while receding
+        const op = at <= 1 ? 1 - 0.4 * cl : Math.max(0, 1 - (at - 1) * 1.6);
         c.style.opacity = op.toFixed(3);
-        const away = Math.max(0, 1 - cos); // 0 front → 1 edge-on
-        c.style.filter = FX && away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
-        // cylinder transform, standard carousel construction: step back by
-        // the radius, spin to the slot angle, then push the card out to the
-        // ring. The front card lands exactly at z=0 — true CSS size, never
-        // magnified by the camera — while side cards shrink with depth.
+        c.style.filter = FX && at > 0.02 ? 'grayscale(' + Math.min(1, cl * 1.2).toFixed(2) + ') blur(' + (cl * 2.5).toFixed(1) + 'px)' : '';
         c.style.transform =
           'translate(-50%, -50%)' +
-          ' translateZ(' + (-RADIUS).toFixed(1) + 'px)' +
-          ' rotateY(' + (angle * 180 / Math.PI).toFixed(2) + 'deg)' +
-          ' translateZ(' + RADIUS.toFixed(1) + 'px)';
+          ' translateX(' + x.toFixed(1) + 'px)' +
+          ' translateZ(' + z.toFixed(1) + 'px)' +
+          ' rotateY(' + rot.toFixed(2) + 'deg)' +
+          ' scale(' + (1 - 0.15 * cl).toFixed(3) + ')';
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
@@ -467,8 +470,8 @@
       dragging = false;
       track.classList.remove('dragging');
       if (!dragMoved) return; // pure click — let the click event through
-      // one gesture = one slot around the ring (wraps forever)
-      const threshold = Math.min(90, ARC * 0.25);
+      // one gesture = one slot (wraps forever)
+      const threshold = Math.min(90, SPREAD * 0.25);
       if (dragOffset <= -threshold) goTo(index + 1);
       else if (dragOffset >= threshold) goTo(index - 1);
       else goTo(index); // snap back
