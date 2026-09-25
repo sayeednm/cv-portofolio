@@ -675,18 +675,21 @@ body::after {
   background: var(--bg-card);
   transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
-.design-card:hover { box-shadow: var(--card-shadow-hover); border-color: var(--border-cyan); }
+/* hover effects only for real cursors — on touch they would stick after tap */
+@media (hover: hover) {
+  .design-card:hover { box-shadow: var(--card-shadow-hover); border-color: var(--border-cyan); }
+  .design-card:hover .design-img-wrap img { transform: scale(1.06); }
+  .design-card:hover .design-overlay { opacity: 1; }
+}
 .design-card.hidden { display: none; }
 .design-img-wrap { position: relative; height: 220px; overflow: hidden; }
 .design-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s var(--ease-out-expo); }
-.design-card:hover .design-img-wrap img { transform: scale(1.06); }
 .design-overlay {
   position: absolute; inset: 0;
   background: rgba(0, 0, 0, 0.6);
   display: flex; align-items: center; justify-content: center;
   opacity: 0; transition: opacity var(--transition);
 }
-.design-card:hover .design-overlay { opacity: 1; }
 .design-zoom {
   width: 48px; height: 48px; border-radius: 50%;
   background: var(--cyan); color: var(--dark);
@@ -715,7 +718,9 @@ body::after {
 
 /* ===== VIDEO CARD ===== */
 .video-thumb { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s var(--ease-out-expo); }
-.design-card:hover .video-thumb { transform: scale(1.06); }
+@media (hover: hover) {
+  .design-card:hover .video-thumb { transform: scale(1.06); }
+}
 .video-play-btn {
   width: 56px !important; height: 56px !important;
   background: #FF0000 !important; border-radius: 50% !important;
@@ -760,13 +765,15 @@ body::after {
   will-change: transform;
   transition: transform 0.45s var(--ease-out-expo), border-color var(--transition), box-shadow 0.45s ease;
 }
-.design-grid:not(.dc-track) .glass-design-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 36px 64px -24px rgba(0, 0, 0, 0.55),
-    0 12px 28px -14px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+@media (hover: hover) {
+  .design-grid:not(.dc-track) .glass-design-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 36px 64px -24px rgba(0, 0, 0, 0.55),
+      0 12px 28px -14px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
 }
 .dc-stage .glass-design-card .design-img-wrap { height: 100%; }
 /* caption & chip scaled for the uniform 250x333 frame */
@@ -806,7 +813,9 @@ body::after {
 }
 .design-caption-line { width: 22px; height: 2px; border-radius: 2px; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
 .glass-design-card .design-name { color: #fff; font-size: 1rem; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35); }
-.glass-design-card:hover .design-caption { transform: translateY(-4px); }
+@media (hover: hover) {
+  .glass-design-card:hover .design-caption { transform: translateY(-4px); }
+}
 .glass-design-card .design-overlay { border-radius: inherit; }
 .video-caption { bottom: 50px; }
 @media (hover: none) {
@@ -863,13 +872,15 @@ body::after {
     0 30px 60px -22px rgba(0, 0, 0, 0.6),
     0 10px 24px -14px rgba(0, 0, 0, 0.5);
 }
-.dc-stage .design-card[data-rel="0"]:hover {
-  border-color: rgba(16, 185, 129, 0.55);
-  box-shadow:
-    0 0 48px -2px rgba(16, 185, 129, 0.55),
-    0 0 90px -10px rgba(16, 185, 129, 0.3),
-    0 36px 64px -24px rgba(0, 0, 0, 0.55),
-    0 10px 24px -14px rgba(0, 0, 0, 0.5);
+@media (hover: hover) {
+  .dc-stage .design-card[data-rel="0"]:hover {
+    border-color: rgba(16, 185, 129, 0.55);
+    box-shadow:
+      0 0 48px -2px rgba(16, 185, 129, 0.55),
+      0 0 90px -10px rgba(16, 185, 129, 0.3),
+      0 36px 64px -24px rgba(0, 0, 0, 0.55),
+      0 10px 24px -14px rgba(0, 0, 0, 0.5);
+  }
 }
 .dc-controls { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px; }
 /* dots row above the arrow pair, like the reference */
