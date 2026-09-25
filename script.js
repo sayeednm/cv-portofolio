@@ -381,7 +381,7 @@
     });
     const dots = [...dotsWrap.children];
 
-    const RADIUS = 320;                                          // cylinder radius (px)
+    const RADIUS = 280;                                          // cylinder radius (px)
     const SLOT = 68 * Math.PI / 180;                             // degrees per card
     const ARC = RADIUS * SLOT;                                   // px of drag per card
 
@@ -402,11 +402,15 @@
         c.style.opacity = op.toFixed(3);
         const away = Math.max(0, 1 - cos); // 0 front → 1 edge-on
         c.style.filter = away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
-        // cylinder transform: center, spin to face outward, push to radius
+        // cylinder transform, standard carousel construction: step back by
+        // the radius, spin to the slot angle, then push the card out to the
+        // ring. The front card lands exactly at z=0 — true CSS size, never
+        // magnified by the camera — while side cards shrink with depth.
         c.style.transform =
           'translate(-50%, -50%)' +
+          ' translateZ(' + (-RADIUS).toFixed(1) + 'px)' +
           ' rotateY(' + (angle * 180 / Math.PI).toFixed(2) + 'deg)' +
-          ' translateZ(' + (RADIUS * (angle === 0 ? 1 : 1)).toFixed(1) + 'px)';
+          ' translateZ(' + RADIUS.toFixed(1) + 'px)';
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }

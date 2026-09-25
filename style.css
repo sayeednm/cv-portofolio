@@ -818,8 +818,11 @@ body::after {
   --card-w: 250px;
   --card-h: 333px;
   position: relative;
-  height: calc(var(--card-h) + 30px);
-  perspective: 1200px;
+  /* front card lands at exactly z=0 (true CSS size) — this headroom keeps it
+     clear of the section title line above and the controls below */
+  height: calc(var(--card-h) + 80px);
+  margin-top: 14px;
+  perspective: 2000px;
   overflow: visible;
 }
 .dc-track {
@@ -849,7 +852,7 @@ body::after {
     0 12px 28px -14px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
-.dc-controls { display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 30px; }
+.dc-controls { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 16px; }
 /* dots row above the arrow pair, like the reference */
 .dc-arrows { display: flex; gap: 16px; }
 .dc-dots { display: flex; gap: 8px; align-items: center; justify-content: center; }
@@ -1249,7 +1252,7 @@ body::after {
   .skillbars-grid { grid-template-columns: 1fr; gap: 0; }
   .design-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .design-img-wrap { height: 160px; }
-  .dc-stage { --card-w: 220px; --card-h: 293px; }
+  .dc-stage { --card-w: 220px; --card-h: 293px; height: calc(var(--card-h) + 70px); }
   .dc-btn { width: 40px; height: 40px; }
   .glass-design-card .design-img-wrap { height: 250px; }
   .glass-design-card .design-name { font-size: 0.85rem; }
@@ -1288,7 +1291,7 @@ body::after {
   .about-photo-placeholder { width: 160px; height: 200px; }
   .design-grid { grid-template-columns: 1fr; }
   .design-img-wrap { height: 180px; }
-  .dc-stage { --card-w: min(250px, 72vw); --card-h: 333px; }
+  .dc-stage { --card-w: min(250px, 72vw); --card-h: 333px; height: calc(var(--card-h) + 70px); }
   .glass-design-card .design-img-wrap { height: 300px; }
   .glass-design-card .design-name { font-size: 0.9rem; }
   .hobbies-grid { grid-template-columns: 1fr; }
