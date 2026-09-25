@@ -390,15 +390,21 @@
       cards.forEach((c, k) => {
         let rel = mod(k - index, N);
         if (rel > N / 2) rel -= N; // signed shortest ring distance
-        const abs = Math.abs(rel);
-        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, rel))));
-        c.style.zIndex = String(20 - Math.min(9, abs));
-        c.style.visibility = abs > 1 ? 'hidden' : '';
-        // flat stack like the reference: no rotateY, sides shrink & fade out
-        const scale = rel === 0 ? 1 : 0.5;
+        // fractional ring position: drag slides cards continuously through
+        // their slots, so they visibly curl backward while being swiped
+        const t = rel + dragOffset / pitch;
+        const at = Math.abs(t);
+        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
+        c.style.zIndex = String(20 - Math.min(10, Math.round(at * 4)));
+        c.style.visibility = at > 1.9 ? 'hidden' : '';
+        const dir = t < -0.001 ? 1 : -1;               // curl away from center
+        const rot = dir * Math.min(at, 1.05) * 34;      // rotate to the back
+        const scale = 1 - 0.28 * Math.min(at, 1);
+        const op = Math.max(0, 1 - 0.62 * Math.min(at, 1.25)); // faint fade
+        c.style.opacity = op.toFixed(3);
         c.style.transform =
-          'translate(-50%, -50%) translateX(' + (rel * pitch + dragOffset) + 'px)' +
-          ' scale(' + scale + ')';
+          'translate(-50%, -50%) translateX(' + (t * pitch).toFixed(1) + 'px)' +
+          ' rotateY(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
@@ -422,24 +428,31 @@
     }
 
     prevBtn.addEventListener('click', () => goTo(index - 1));
-    nextBtn.addEventListener('click', () => goTo(index + 1));
-
+    nextBtn.addEventListener('click', () => goTo(index + 1));    let pointerId = null;
     track.addEventListener('pointerdown', e => {
       if (e.button !== 0 || dragging) return;
       dragging = true; dragMoved = false;
       startX = e.clientX; dragOffset = 0;
-      track.classList.add('dragging');
-      try { track.setPointerCapture(e.pointerId); } catch (_) {}
+      pointerId = e.pointerId;
+      // NO capture yet: capturing on down retargets the upcoming click to the
+      // track, which is why zoom/play never opened. Capture only once the
+      // pointer proves it is a drag (moved > 8px).
     });
     track.addEventListener('pointermove', e => {
       if (!dragging) return;
       dragOffset = e.clientX - startX;
-      if (Math.abs(dragOffset) > 8) dragMoved = true;
-      place();
+      if (!dragMoved && Math.abs(dragOffset) > 8) {
+        dragMoved = true;
+        try { track.setPointerCapture(pointerId); } catch (_) {}
+        track.classList.add('dragging');
+      }
+      if (dragMoved) place();
     });
     const endDrag = () => {
       if (!dragging) return;
       dragging = false;
+      track.classList.remove('dragging');
+      if (!dragMoved) return; // pure click — let the click event through
       // one gesture = one card, in the direction of the drag (wraps at ends)
       const threshold = Math.min(90, pitch * 0.22);
       if (dragOffset <= -threshold) goTo(index + 1);
@@ -448,12 +461,16 @@
     };
     track.addEventListener('pointerup', endDrag);
     track.addEventListener('pointercancel', endDrag);
-
-    // A genuine click has almost no pointer travel. After a real drag the
-    // click is swallowed exactly once, then re-armed on the next pointerdown,
-    // so zoom/play buttons on the front card keep working normally.
+    // After a real drag, swallow the trailing click exactly once (it fires on
+    // the track because of the capture), then re-arm on the next pointerdown.
     track.addEventListener('click', e => {
-      if (dragMoved) { e.preventDefault(); e.stopPropagation(); dragMoved = false; }
+      if (dragMoved) { e.preventDefault(); e.stopPropagation(); dragMoved = false; return; }
+      // Click (no drag): a side card navigates to the front; the front card's
+      // own zoom/play buttons receive their normal click handlers.
+      const card = e.target.closest('.design-card');
+      if (!card || !track.contains(card)) return;
+      const rel = parseInt(card.getAttribute('data-rel') || '0', 10);
+      if (rel !== 0) { e.preventDefault(); e.stopPropagation(); goTo(index + rel); }
     }, true);
 
     stage.setAttribute('tabindex', '0');
