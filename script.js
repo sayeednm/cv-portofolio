@@ -382,7 +382,7 @@
     const dots = [...dotsWrap.children];
 
     const RADIUS = 280;                                          // cylinder radius (px)
-    const SLOT = 68 * Math.PI / 180;                             // degrees per card
+    const SLOT = 82 * Math.PI / 180;                             // degrees per card
     const ARC = RADIUS * SLOT;                                   // px of drag per card
 
     function place() {

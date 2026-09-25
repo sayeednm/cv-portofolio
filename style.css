@@ -780,10 +780,10 @@ body::after {
   position: absolute; top: 14px; left: 14px; z-index: 3;
   width: 44px; height: 44px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.05rem; color: var(--dark);
-  background: var(--accent);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.45), 0 0 16px rgba(16, 185, 129, 0.35);
+  font-size: 1.05rem; color: var(--accent); /* green glyph only */
+  background: rgba(255, 255, 255, 0.96);     /* white chip, like the reference */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.4);
   pointer-events: none;
 }
 .design-caption {
@@ -820,7 +820,7 @@ body::after {
   position: relative;
   /* front card lands at exactly z=0 (true CSS size) — this headroom keeps it
      clear of the section title line above and the controls below */
-  height: calc(var(--card-h) + 80px);
+  height: calc(var(--card-h) + 56px);
   margin-top: 14px;
   perspective: 2000px;
   overflow: visible;
@@ -852,7 +852,7 @@ body::after {
     0 12px 28px -14px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
-.dc-controls { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 16px; }
+.dc-controls { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px; }
 /* dots row above the arrow pair, like the reference */
 .dc-arrows { display: flex; gap: 16px; }
 .dc-dots { display: flex; gap: 8px; align-items: center; justify-content: center; }
