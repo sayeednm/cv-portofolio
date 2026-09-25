@@ -367,7 +367,7 @@
     // The track never moves; every card is placed on a ring slot directly.
     // Ring distance wraps, so the last card sits LEFT of the first one and
     // navigation can go forever in both directions.
-    let index = 0, pitch = 0;
+    let index = 0;
     let dragging = false, dragMoved = false, startX = 0, dragOffset = 0;
 
     const mod = (n, m) => ((n % m) + m) % m;
@@ -381,34 +381,32 @@
     });
     const dots = [...dotsWrap.children];
 
-    function measure() {
-      // offsetWidth ignores transforms -> stable across resize/navigation
-      pitch = (cards[0].offsetWidth || stage.clientWidth * 0.72) * 1.9;
-    }
+    const RADIUS = 320;                                          // cylinder radius (px)
+    const SLOT = 68 * Math.PI / 180;                             // degrees per card
+    const ARC = RADIUS * SLOT;                                   // px of drag per card
 
     function place() {
       cards.forEach((c, k) => {
         let rel = mod(k - index, N);
         if (rel > N / 2) rel -= N; // signed shortest ring distance
-        // fractional ring position: drag slides cards continuously through
-        // their slots, so they visibly spin into the tunnel while swiped
-        const t = rel + dragOffset / pitch;
-        const at = Math.abs(t);
-        const cl = Math.min(at, 1);            // progress toward side slot
-        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
-        c.style.zIndex = String(20 - Math.min(10, Math.round(at * 4)));
-        c.style.visibility = at > 1.9 ? 'hidden' : '';
-        // 3D depth tunnel: cards spin ~72° toward edge-on as they leave center
-        const rot = (t < -0.001 ? 1 : -1) * cl * 72;
-        const scale = 1 - 0.18 * cl;           // slight shrink
-        const push = cl * 60;                  // push behind the front card
-        const op = 1 - 0.25 * cl;              // faint, still readable
+        // Each card owns a slot on a cylinder. Dragging spins the cylinder,
+        // so the pulled card travels sideways and then AROUND THE BACK of
+        // the front one — a true orbit, like the reference tunnel.
+        const angle = (rel + dragOffset / (ARC * 0.55)) * SLOT;
+        const cos = Math.cos(angle), sin = Math.sin(angle);
+        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(rel + dragOffset / (ARC * 0.55))))));
+        c.style.zIndex = String(Math.round(200 + cos * 100)); // front card on top
+        c.style.visibility = cos < -0.2 ? 'hidden' : '';
+        // front card full, sides faint, back fading out before the backface
+        const op = cos >= 0.2 ? 0.55 + 0.45 * cos : Math.max(0, (cos + 0.35) * 0.85);
         c.style.opacity = op.toFixed(3);
-        c.style.filter = at > 0.05 ? 'grayscale(' + (cl * 0.9).toFixed(2) + ') blur(' + (cl * 1.5).toFixed(1) + 'px)' : '';
+        const away = Math.max(0, 1 - cos); // 0 front → 1 edge-on
+        c.style.filter = away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
+        // cylinder transform: center, spin to face outward, push to radius
         c.style.transform =
-          'translate(-50%, -50%) translateX(' + (t * pitch).toFixed(1) + 'px)' +
-          ' translateZ(' + (-push).toFixed(1) + 'px)' +
-          ' rotateY(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+          'translate(-50%, -50%)' +
+          ' rotateY(' + (angle * 180 / Math.PI).toFixed(2) + 'deg)' +
+          ' translateZ(' + (RADIUS * (angle === 0 ? 1 : 1)).toFixed(1) + 'px)';
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
@@ -457,8 +455,8 @@
       dragging = false;
       track.classList.remove('dragging');
       if (!dragMoved) return; // pure click — let the click event through
-      // one gesture = one card, in the direction of the drag (wraps at ends)
-      const threshold = Math.min(90, pitch * 0.22);
+      // one gesture = one slot around the ring (wraps forever)
+      const threshold = Math.min(90, ARC * 0.25);
       if (dragOffset <= -threshold) goTo(index + 1);
       else if (dragOffset >= threshold) goTo(index - 1);
       else goTo(index); // snap back
@@ -486,10 +484,9 @@
     let rT;
     window.addEventListener('resize', () => {
       clearTimeout(rT);
-      rT = setTimeout(() => { measure(); update(false); }, 150);
+      rT = setTimeout(() => { update(false); }, 150);
     });
 
-    measure();
     update(false);
 
     // one-shot entrance: re-tag stagger targets once the scroll reveal fires,

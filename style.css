@@ -810,16 +810,17 @@ body::after {
 
 /* ===== 3D COVERFLOW CAROUSEL (design section) ===== */
 .dc-stage {
-  --card-w: min(300px, 68vw);
-  --card-h: 400px;
+  --card-w: 250px;
+  --card-h: 333px;
   position: relative;
   height: calc(var(--card-h) + 30px);
-  perspective: 1600px;
+  perspective: 1200px;
   overflow: visible;
 }
 .dc-track {
   position: relative;
   height: 100%;
+  transform-style: preserve-3d;
   cursor: grab;
 }
 .dc-track.dragging { cursor: grabbing; }
@@ -1241,7 +1242,7 @@ body::after {
   .skillbars-grid { grid-template-columns: 1fr; gap: 0; }
   .design-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .design-img-wrap { height: 160px; }
-  .dc-stage { --card-w: min(260px, 70vw); --card-h: 347px; }
+  .dc-stage { --card-w: 220px; --card-h: 293px; }
   .dc-btn { width: 40px; height: 40px; }
   .glass-design-card .design-img-wrap { height: 250px; }
   .glass-design-card .design-name { font-size: 0.85rem; }
@@ -1280,7 +1281,7 @@ body::after {
   .about-photo-placeholder { width: 160px; height: 200px; }
   .design-grid { grid-template-columns: 1fr; }
   .design-img-wrap { height: 180px; }
-  .dc-stage { --card-w: 74vw; --card-h: 373px; }
+  .dc-stage { --card-w: min(250px, 72vw); --card-h: 333px; }
   .glass-design-card .design-img-wrap { height: 300px; }
   .glass-design-card .design-name { font-size: 0.9rem; }
   .hobbies-grid { grid-template-columns: 1fr; }
