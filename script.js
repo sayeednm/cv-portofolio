@@ -435,6 +435,7 @@
 
     function goTo(i) {
       index = i; // unbounded: wraps forever via ring math
+      cards.forEach(c => c.classList.remove('touch-glow')); // navigating clears the tap glow
       update(true);
     }
 
@@ -489,7 +490,16 @@
       const card = e.target.closest('.design-card');
       if (!card || !track.contains(card)) return;
       const rel = parseInt(card.getAttribute('data-rel') || '0', 10);
-      if (rel !== 0) { e.preventDefault(); e.stopPropagation(); goTo(index + rel); }
+      if (rel !== 0) { e.preventDefault(); e.stopPropagation(); goTo(index + rel); return; }
+      // Touch devices have no hover: first tap on the front card lights the
+      // green aura, second tap clears it. Taps on the zoom/play buttons are
+      // left alone so the lightbox/video still opens normally.
+      if (e.pointerType === 'touch' || !canHover) {
+        if (!e.target.closest('.design-zoom')) {
+          e.preventDefault();
+          card.classList.toggle('touch-glow');
+        }
+      }
     }, true);
 
     stage.setAttribute('tabindex', '0');
