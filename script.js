@@ -383,7 +383,7 @@
 
     function measure() {
       // offsetWidth ignores transforms -> stable across resize/navigation
-      pitch = (cards[0].offsetWidth || stage.clientWidth * 0.72) * 1.14;
+      pitch = (cards[0].offsetWidth || stage.clientWidth * 0.72) * 1.55;
     }
 
     function place() {
@@ -393,11 +393,12 @@
         const abs = Math.abs(rel);
         c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, rel))));
         c.style.zIndex = String(20 - Math.min(9, abs));
-        c.style.visibility = abs > 3 ? 'hidden' : '';
-        const scale = abs >= 3 ? 0.55 : 1 - abs * 0.15;
+        c.style.visibility = abs > 1 ? 'hidden' : '';
+        // flat stack like the reference: no rotateY, sides shrink & fade out
+        const scale = rel === 0 ? 1 : 0.5;
         c.style.transform =
           'translate(-50%, -50%) translateX(' + (rel * pitch + dragOffset) + 'px)' +
-          ' rotateY(' + (-rel * 38) + 'deg) scale(' + scale + ')';
+          ' scale(' + scale + ')';
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
