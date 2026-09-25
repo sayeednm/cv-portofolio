@@ -399,23 +399,36 @@
         // card rides the circle sideways and around the back of the front one
         const t = rel + dragOffset / ARC;
         const angle = t * SLOT;
-        const cos = Math.cos(angle), sin = Math.sin(angle);
-        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
-        c.style.zIndex = String(Math.round(200 + cos * 100)); // front on top
+        const cos = Math.cos(angle);
         // gone just past edge-on: never reaches the far side (no bunching)
         const visible = cos > -0.35;
+        // phones: skip all work for cards the user can no longer see —
+        // hiding them once is enough, they stay parked while off-ring
+        if (!visible && c._dcHidden) return;
+        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
+        c.style.zIndex = String(Math.round(200 + cos * 100)); // front on top
         c.style.visibility = visible ? '' : 'hidden';
         const op = visible ? Math.max(0, Math.min(1, (cos + 0.35) / 0.85)) : 0;
         c.style.opacity = op.toFixed(3);
         const away = Math.max(0, 1 - cos); // 0 front → 1 edge-on
-        c.style.filter = FX && away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
+        const filt = FX && visible && away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
+        // touch tap-glow lifts the card (composes with the ring transform)
+        const lift = c.classList.contains('touch-glow') ? ' translateY(-14px)' : '';
         // cylinder transform: step back, rotate to the slot, push out to the
         // ring — front card lands at z=0 (true size), sides shrink with depth
-        c.style.transform =
+        const tf =
           'translate(-50%, -50%)' +
           ' translateZ(' + (-RADIUS).toFixed(1) + 'px)' +
           ' rotateY(' + (angle * 180 / Math.PI).toFixed(2) + 'deg)' +
-          ' translateZ(' + RADIUS.toFixed(1) + 'px)';
+          ' translateZ(' + RADIUS.toFixed(1) + 'px)' + lift;
+        // phones: touch the DOM only when a value actually changed — repeated
+        // identical writes are what made the drag feel laggy there
+        if (c._dcTf !== tf) { c.style.transform = tf; c._dcTf = tf; }
+        if (c._dcOp !== op) { c.style.opacity = op.toFixed(3); c._dcOp = op; }
+        if (c._dcZ !== cos) { c.style.zIndex = String(Math.round(200 + cos * 100)); c._dcZ = cos; }
+        if (c._dcF !== filt) { c.style.filter = filt; c._dcF = filt; }
+        if (c._dcVis !== visible) { c.style.visibility = visible ? '' : 'hidden'; c._dcVis = visible; }
+        c._dcHidden = !visible;
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
@@ -498,6 +511,7 @@
         if (!e.target.closest('.design-zoom')) {
           e.preventDefault();
           card.classList.toggle('touch-glow');
+          place(); // re-render so the glow lift takes effect immediately
         }
       }
     }, true);
@@ -530,6 +544,22 @@
     obs.observe(stage);
   });
   } catch (err) { console.warn('Carousel init skipped:', err); }
+
+  /* ===== TOUCH TAP-LIFT for the video grid (hover:none devices) =====
+     Touch has no hover, so the lift/play-button reveal was unreachable.
+     First tap lifts the card + glow + shows the play button, second tap
+     puts it back; taps on the play button itself stay untouched. */
+  try {
+  if (!canHover) {
+    document.querySelectorAll('.design-grid:not(.dc-track) .design-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.closest('.design-zoom')) return; // play button: open normally
+        e.preventDefault();
+        card.classList.toggle('touch-lift');
+      });
+    });
+  }
+  } catch (err) { console.warn('Touch lift init skipped:', err); }
 
   /* ================= ABOUT PHOTO SLIDESHOW ================= */
   const aboutSlides = document.querySelectorAll('.about-slide');

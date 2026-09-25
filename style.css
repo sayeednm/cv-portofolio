@@ -763,7 +763,7 @@ body::after {
   overflow: hidden;
   transform-style: preserve-3d;
   will-change: transform;
-  transition: transform 0.45s var(--ease-out-expo), border-color var(--transition), box-shadow 0.45s ease;
+  transition: transform 0.45s var(--ease-out-expo), opacity 0.7s ease, border-color var(--transition), box-shadow 0.45s ease;
 }
 @media (hover: hover) {
   .design-grid:not(.dc-track) .glass-design-card:hover {
@@ -819,7 +819,8 @@ body::after {
 .glass-design-card .design-overlay { border-radius: inherit; }
 .video-caption { bottom: 50px; }
 @media (hover: none) {
-  .design-grid:not(.dc-track) .glass-design-card { transform: none !important; }
+  /* never fight the ring transforms; JS owns the touch lift instead */
+  .design-grid:not(.dc-track) .glass-design-card:not(.touch-lift) { transform: none; }
   /* phones: drop the expensive frosted-glass layers everywhere */
   .design-caption,
   .design-chip {
@@ -829,6 +830,19 @@ body::after {
     box-shadow: none;
   }
   .video-thumb, .design-img-wrap img { transition: none; }
+  /* touch has no hover either: JS toggles .touch-lift on tap —
+     first tap lifts the video card + glow + reveals the play button,
+     second tap puts it back (play button taps are left alone) */
+  .design-grid .design-card.touch-lift {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 36px 64px -24px rgba(0, 0, 0, 0.55),
+      0 12px 28px -14px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 0 40px -8px rgba(16, 185, 129, 0.4);
+  }
+  .design-grid .design-card.touch-lift .design-overlay { opacity: 1; }
 }
 
 /* ===== 3D COVERFLOW CAROUSEL (design section) ===== */
@@ -882,9 +896,11 @@ body::after {
       0 10px 24px -14px rgba(0, 0, 0, 0.5);
   }
 }
-/* touch devices have no hover: tap the front card once to light the aura,
-   tap again to clear it (class toggled from JS). Also reveals the zoom
-   button, which otherwise stays hidden because :hover never fires. */
+/* touch devices have no hover: tap the front card once to light the aura
+   AND lift it (the desktop-hover feel; the translateY is applied by JS so
+   it composes with the ring transform), tap again to clear it (class
+   toggled from JS). Also reveals the zoom button, which otherwise stays
+   hidden because :hover never fires. */
 .dc-stage .design-card.touch-glow {
   border-color: rgba(16, 185, 129, 0.55);
   box-shadow:
@@ -894,6 +910,10 @@ body::after {
     0 10px 24px -14px rgba(0, 0, 0, 0.5);
 }
 .dc-stage .design-card.touch-glow .design-overlay { opacity: 1; }
+/* mobile: shorter transitions make the carousel feel snappier mid-drag */
+@media (max-width: 768px) {
+  .dc-stage .design-card { transition-duration: 0.32s; }
+}
 .dc-controls { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px; }
 /* dots row above the arrow pair, like the reference */
 .dc-arrows { display: flex; gap: 16px; }
@@ -935,6 +955,10 @@ body::after {
 @media (hover: none) {
   .dc-hint { display: none; }
 }
+
+/* ===== VIDEO GRID SCROLL ENTRANCE ===== */
+.reveal.blur-in { filter: blur(10px); }
+.reveal.blur-in.visible { filter: blur(0); }
 
 /* ===== CAROUSEL SCROLL ENTRANCE (staggered per card) ===== */
 @keyframes dcCardIn {
