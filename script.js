@@ -440,6 +440,8 @@
 
     prevBtn.addEventListener('click', () => goTo(index - 1));
     nextBtn.addEventListener('click', () => goTo(index + 1));    let pointerId = null;
+    // touch drag on phones: 8px desktop threshold feels laggy with a finger
+    const DRAG_START = isMobile ? 4 : 8;
     track.addEventListener('pointerdown', e => {
       if (e.button !== 0 || dragging) return;
       dragging = true; dragMoved = false;
@@ -458,7 +460,7 @@
     track.addEventListener('pointermove', e => {
       if (!dragging) return;
       dragOffset = e.clientX - startX;
-      if (!dragMoved && Math.abs(dragOffset) > 8) {
+      if (!dragMoved && Math.abs(dragOffset) > DRAG_START) {
         dragMoved = true;
         try { track.setPointerCapture(pointerId); } catch (_) {}
         track.classList.add('dragging');

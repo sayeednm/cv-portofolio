@@ -811,6 +811,15 @@ body::after {
 .video-caption { bottom: 50px; }
 @media (hover: none) {
   .design-grid:not(.dc-track) .glass-design-card { transform: none !important; }
+  /* phones: drop the expensive frosted-glass layers everywhere */
+  .design-caption,
+  .design-chip {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(10, 15, 25, 0.72);
+    box-shadow: none;
+  }
+  .video-thumb, .design-img-wrap img { transition: none; }
 }
 
 /* ===== 3D COVERFLOW CAROUSEL (design section) ===== */
