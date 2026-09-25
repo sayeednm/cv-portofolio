@@ -384,6 +384,8 @@
     const RADIUS = 280;                                          // cylinder radius (px)
     const SLOT = 82 * Math.PI / 180;                             // degrees per card
     const ARC = RADIUS * SLOT;                                   // px of drag per card
+    // blur/grayscale look great on desktop but cost paint time on phones
+    const FX = !isMobile && !reducedMotion;
 
     function place() {
       cards.forEach((c, k) => {
@@ -401,7 +403,7 @@
         const op = cos >= 0.2 ? 0.55 + 0.45 * cos : Math.max(0, (cos + 0.35) * 0.85);
         c.style.opacity = op.toFixed(3);
         const away = Math.max(0, 1 - cos); // 0 front → 1 edge-on
-        c.style.filter = away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
+        c.style.filter = FX && away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
         // cylinder transform, standard carousel construction: step back by
         // the radius, spin to the slot angle, then push the card out to the
         // ring. The front card lands exactly at z=0 — true CSS size, never
@@ -444,6 +446,12 @@
       // track, which is why zoom/play never opened. Capture only once the
       // pointer proves it is a drag (moved > 8px).
     });
+    // coalesce pointermove storms into one style pass per frame
+    let placeRaf = 0;
+    const schedulePlace = () => {
+      if (placeRaf) return;
+      placeRaf = requestAnimationFrame(() => { placeRaf = 0; place(); });
+    };
     track.addEventListener('pointermove', e => {
       if (!dragging) return;
       dragOffset = e.clientX - startX;
@@ -452,8 +460,8 @@
         try { track.setPointerCapture(pointerId); } catch (_) {}
         track.classList.add('dragging');
       }
-      if (dragMoved) place();
-    });
+      if (dragMoved) schedulePlace();
+    }, { passive: true });
     const endDrag = () => {
       if (!dragging) return;
       dragging = false;
