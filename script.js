@@ -385,7 +385,7 @@
     // spins edge-on (~72deg) and recedes — reading as swinging around the
     // back — then fades out. NOTE: a strict cylinder (N*slot=360deg) is
     // impossible with 8 cards and wide slots; it bunched cards together.
-    const SPREAD = 300;                                          // px per slot
+    const SPREAD = 520;                                          // px per slot
     // blur/grayscale look great on desktop but cost paint time on phones
     const FX = !isMobile && !reducedMotion;
 
@@ -406,7 +406,7 @@
         c.style.visibility = at > 1.9 ? 'hidden' : '';
         const rot = -dir * cl * 72;                    // spin to the back
         const z = -cl * 260;                           // recede behind front
-        const x = t * SPREAD * (1 - 0.25 * cl);        // bunch while receding
+        const x = t * SPREAD * (1 - 0.12 * cl);        // wide, airy spacing
         const op = at <= 1 ? 1 - 0.4 * cl : Math.max(0, 1 - (at - 1) * 1.6);
         c.style.opacity = op.toFixed(3);
         c.style.filter = FX && at > 0.02 ? 'grayscale(' + Math.min(1, cl * 1.2).toFixed(2) + ') blur(' + (cl * 2.5).toFixed(1) + 'px)' : '';
