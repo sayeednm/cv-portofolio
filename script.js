@@ -353,6 +353,7 @@
   });
 
   /* ================= 3D COVERFLOW CAROUSEL ================= */
+  try {
   document.querySelectorAll('[data-carousel]').forEach(root => {
     const stage = root.querySelector('.dc-stage');
     const track = root.querySelector('.dc-track');
@@ -360,7 +361,7 @@
     const dotsWrap = root.querySelector('.dc-dots');
     const prevBtn = root.querySelector('.dc-prev');
     const nextBtn = root.querySelector('.dc-next');
-    if (!stage || !track || cards.length === 0) return;
+    if (!stage || !track || cards.length === 0 || !dotsWrap || !prevBtn || !nextBtn) return;
 
     let index = 0, pitch = 0, offset0 = 0, txBase = 0;
     let dragging = false, startX = 0, startTx = 0, moved = 0;
@@ -461,6 +462,7 @@
     measure();
     update(false);
   });
+  } catch (err) { console.warn('Carousel init skipped:', err); }
 
   /* ================= ABOUT PHOTO SLIDESHOW ================= */
   const aboutSlides = document.querySelectorAll('.about-slide');
