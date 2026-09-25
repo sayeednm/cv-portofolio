@@ -352,7 +352,7 @@
     applyLang(currentLang);
   });
 
-  /* ================= 3D COVERFLOW CAROUSEL ================= */
+  /* ================= 3D COVERFLOW CAROUSEL (infinite loop) ================= */
   try {
   document.querySelectorAll('[data-carousel]').forEach(root => {
     const stage = root.querySelector('.dc-stage');
@@ -362,57 +362,61 @@
     const prevBtn = root.querySelector('.dc-prev');
     const nextBtn = root.querySelector('.dc-next');
     if (!stage || !track || cards.length === 0 || !dotsWrap || !prevBtn || !nextBtn) return;
+    const N = cards.length;
 
-    let index = 0, pitch = 0, offset0 = 0, txBase = 0;
-    let dragging = false, startX = 0, startTx = 0, moved = 0;
+    // The track never moves; every card is placed on a ring slot directly.
+    // Ring distance wraps, so the last card sits LEFT of the first one and
+    // navigation can go forever in both directions.
+    let index = 0, pitch = 0;
+    let dragging = false, dragMoved = false, startX = 0, dragOffset = 0;
+
+    const mod = (n, m) => ((n % m) + m) % m;
 
     cards.forEach((_, k) => {
       const d = document.createElement('button');
       d.className = 'dc-dot' + (k === 0 ? ' active' : '');
-      d.setAttribute('aria-label', (k + 1) + ' / ' + cards.length);
+      d.setAttribute('aria-label', (k + 1) + ' / ' + N);
       d.addEventListener('click', () => goTo(k));
       dotsWrap.appendChild(d);
     });
     const dots = [...dotsWrap.children];
 
     function measure() {
-      cards.forEach(c => c.removeAttribute('data-rel'));
-      track.classList.add('dragging');
-      track.style.transform = 'translate3d(0,0,0)';
-      const r0 = cards[0].getBoundingClientRect();
-      const r1 = cards.length > 1 ? cards[1].getBoundingClientRect() : r0;
-      pitch = (r1.left - r0.left) || r0.width * 1.14;
-      const st = stage.getBoundingClientRect();
-      offset0 = (r0.left + r0.width / 2) - (st.left + st.width / 2);
-      txBase = -offset0;
-      void track.offsetWidth;
-      track.classList.remove('dragging');
+      // offsetWidth ignores transforms -> stable across resize/navigation
+      pitch = (cards[0].offsetWidth || stage.clientWidth * 0.72) * 1.14;
+    }
+
+    function place() {
+      cards.forEach((c, k) => {
+        let rel = mod(k - index, N);
+        if (rel > N / 2) rel -= N; // signed shortest ring distance
+        const abs = Math.abs(rel);
+        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, rel))));
+        c.style.zIndex = String(20 - Math.min(9, abs));
+        c.style.visibility = abs > 3 ? 'hidden' : '';
+        const scale = abs >= 3 ? 0.55 : 1 - abs * 0.15;
+        c.style.transform =
+          'translate(-50%, -50%) translateX(' + (rel * pitch + dragOffset) + 'px)' +
+          ' rotateY(' + (-rel * 38) + 'deg) scale(' + scale + ')';
+      });
+      dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
 
     function update(animate = true) {
-      cards.forEach((c, k) => {
-        const rel = k - index;
-        if (Math.abs(rel) <= 3) c.setAttribute('data-rel', String(rel));
-        else c.removeAttribute('data-rel');
-        c.style.transform = '';
-      });
-      txBase = -offset0 - index * pitch;
-      if (!animate) {
+      dragOffset = 0;
+      if (animate) {
+        track.classList.remove('dragging');
+        place();
+      } else {
         track.classList.add('dragging');
-        track.style.transform = 'translate3d(' + txBase + 'px,0,0)';
+        place();
         void track.offsetWidth;
         track.classList.remove('dragging');
-      } else {
-        track.classList.remove('dragging');
-        track.style.transform = 'translate3d(' + txBase + 'px,0,0)';
       }
-      dots.forEach((d, k) => d.classList.toggle('active', k === index));
-      prevBtn.disabled = index === 0;
-      nextBtn.disabled = index === cards.length - 1;
     }
 
     function goTo(i) {
-      index = Math.max(0, Math.min(cards.length - 1, i));
+      index = i; // unbounded: wraps forever via ring math
       update(true);
     }
 
@@ -420,31 +424,35 @@
     nextBtn.addEventListener('click', () => goTo(index + 1));
 
     track.addEventListener('pointerdown', e => {
-      if (e.button !== 0) return;
-      dragging = true; moved = 0;
-      startX = e.clientX; startTx = txBase;
+      if (e.button !== 0 || dragging) return;
+      dragging = true; dragMoved = false;
+      startX = e.clientX; dragOffset = 0;
       track.classList.add('dragging');
-      track.setPointerCapture(e.pointerId);
+      try { track.setPointerCapture(e.pointerId); } catch (_) {}
     });
     track.addEventListener('pointermove', e => {
       if (!dragging) return;
-      moved = e.clientX - startX;
-      track.style.transform = 'translate3d(' + (startTx + moved) + 'px,0,0)';
+      dragOffset = e.clientX - startX;
+      if (Math.abs(dragOffset) > 8) dragMoved = true;
+      place();
     });
     const endDrag = () => {
       if (!dragging) return;
       dragging = false;
-      const step = Math.abs(moved) > 8
-        ? Math.max(-2, Math.min(2, Math.round(-moved / (pitch * 0.5)) || (moved < 0 ? 1 : -1)))
-        : 0;
-      goTo(index + step);
+      // one gesture = one card, in the direction of the drag (wraps at ends)
+      const threshold = Math.min(90, pitch * 0.22);
+      if (dragOffset <= -threshold) goTo(index + 1);
+      else if (dragOffset >= threshold) goTo(index - 1);
+      else goTo(index); // snap back
     };
     track.addEventListener('pointerup', endDrag);
     track.addEventListener('pointercancel', endDrag);
 
-    // suppress accidental clicks on buttons right after a drag
+    // A genuine click has almost no pointer travel. After a real drag the
+    // click is swallowed exactly once, then re-armed on the next pointerdown,
+    // so zoom/play buttons on the front card keep working normally.
     track.addEventListener('click', e => {
-      if (Math.abs(moved) > 8) { e.preventDefault(); e.stopPropagation(); moved = 0; }
+      if (dragMoved) { e.preventDefault(); e.stopPropagation(); dragMoved = false; }
     }, true);
 
     stage.setAttribute('tabindex', '0');
@@ -461,6 +469,19 @@
 
     measure();
     update(false);
+
+    // one-shot entrance: re-tag stagger targets once the scroll reveal fires,
+    // then clear the tag so navigation never replays the blur animation
+    const carouselEl = root;
+    const obs = new IntersectionObserver((entries, o) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        carouselEl.classList.add('dc-entered');
+        setTimeout(() => carouselEl.classList.add('dc-done'), 1400);
+        o.disconnect();
+      });
+    }, { threshold: 0.25 });
+    obs.observe(stage);
   });
   } catch (err) { console.warn('Carousel init skipped:', err); }
 
