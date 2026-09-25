@@ -383,7 +383,7 @@
 
     function measure() {
       // offsetWidth ignores transforms -> stable across resize/navigation
-      pitch = (cards[0].offsetWidth || stage.clientWidth * 0.72) * 1.55;
+      pitch = (cards[0].offsetWidth || stage.clientWidth * 0.72) * 1.9;
     }
 
     function place() {
@@ -391,19 +391,23 @@
         let rel = mod(k - index, N);
         if (rel > N / 2) rel -= N; // signed shortest ring distance
         // fractional ring position: drag slides cards continuously through
-        // their slots, so they visibly curl backward while being swiped
+        // their slots, so they visibly spin into the tunnel while swiped
         const t = rel + dragOffset / pitch;
         const at = Math.abs(t);
+        const cl = Math.min(at, 1);            // progress toward side slot
         c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
         c.style.zIndex = String(20 - Math.min(10, Math.round(at * 4)));
         c.style.visibility = at > 1.9 ? 'hidden' : '';
-        const dir = t < -0.001 ? 1 : -1;               // curl away from center
-        const rot = dir * Math.min(at, 1.05) * 34;      // rotate to the back
-        const scale = 1 - 0.28 * Math.min(at, 1);
-        const op = Math.max(0, 1 - 0.62 * Math.min(at, 1.25)); // faint fade
+        // 3D depth tunnel: cards spin ~72° toward edge-on as they leave center
+        const rot = (t < -0.001 ? 1 : -1) * cl * 72;
+        const scale = 1 - 0.18 * cl;           // slight shrink
+        const push = cl * 60;                  // push behind the front card
+        const op = 1 - 0.25 * cl;              // faint, still readable
         c.style.opacity = op.toFixed(3);
+        c.style.filter = at > 0.05 ? 'grayscale(' + (cl * 0.9).toFixed(2) + ') blur(' + (cl * 1.5).toFixed(1) + 'px)' : '';
         c.style.transform =
           'translate(-50%, -50%) translateX(' + (t * pitch).toFixed(1) + 'px)' +
+          ' translateZ(' + (-push).toFixed(1) + 'px)' +
           ' rotateY(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
