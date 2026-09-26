@@ -792,7 +792,18 @@ body::after {
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.4);
   pointer-events: none;
+  transition: transform 0.4s var(--ease-spring);
+  will-change: transform;
 }
+@keyframes chipPop {
+  0% { transform: scale(0.6) rotate(-10deg); opacity: 0; }
+  60% { transform: scale(1.12) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.dc-stage .design-card[data-rel="0"] .design-chip i {
+  animation: chipPop 0.7s var(--ease-spring) backwards;
+}
+.dc-track.dragging .design-chip i { animation: none; }
 .design-caption {
   position: absolute; left: 14px; right: 14px; bottom: 14px; z-index: 3;
   padding: 14px 16px;
@@ -803,6 +814,27 @@ body::after {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition: transform 0.45s var(--ease-out-expo);
+  will-change: transform;
+}
+/* caption text micro-animation: the tag line and name slide up + unblur
+   when the card reaches the front slot (JS tags data-rel="0") */
+@keyframes capTextIn {
+  from { opacity: 0; transform: translateY(10px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.dc-stage .design-card[data-rel="0"] .design-caption-tag {
+  animation: capTextIn 0.7s var(--ease-out-expo) backwards;
+}
+.dc-stage .design-card[data-rel="0"] .design-name {
+  animation: capTextIn 0.7s var(--ease-out-expo) 0.08s backwards;
+}
+/* suppress text/chip animation only mid-drag (data-rel flips constantly);
+   on release or arrow/dot nav the animation replays on the new front card */
+.dc-track.dragging .design-caption-tag,
+.dc-track.dragging .design-name {
+  animation: none !important;
+  transform: none;
+  filter: none;
 }
 .design-caption-tag {
   display: flex; align-items: center; gap: 8px;
@@ -874,10 +906,17 @@ body::after {
   transform-origin: center center;
   backface-visibility: hidden; /* no mirrored content while orbiting */
   transform: translateZ(0); /* own compositor layer: smooth 3D updates */
-  will-change: transform, opacity;
-  transition: transform 0.6s var(--ease-out-expo), opacity 0.6s ease, filter 0.6s ease, visibility 0.6s, border-color var(--transition), box-shadow 0.6s ease;
+  will-change: transform, opacity, filter;
+  /* transform (0.6s) animates the snap-to-slot on release + arrow/dot nav;
+     mid-drag it is force-disabled by .dragging so JS tracks the pointer
+     1:1. filter sits on its own slower curve so blur fades in/out slowly. */
+  transition: transform 0.6s var(--ease-out-expo), opacity 0.6s ease, filter 0.55s ease, visibility 0.6s, border-color var(--transition), box-shadow 0.6s ease;
 }
 .dc-track.dragging .design-card { transition: none !important; }
+/* while dragging, caption/chip parallax tracks the pointer 1:1; on release
+   they ease back to rest together with the card */
+.dc-track.dragging .design-caption,
+.dc-track.dragging .design-chip { transition: none !important; }
 /* the active card carries the site's green aura */
 .dc-stage .design-card[data-rel="0"] {
   opacity: 1;
@@ -948,6 +987,15 @@ body::after {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   touch-action: pan-y;
+}
+/* caption frosted glass is a per-frame repaint magnet inside a filtered 3D
+   card — solid dark glass reads the same and keeps the drag smooth */
+.dc-stage .design-caption {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: linear-gradient(160deg, rgba(12, 20, 32, 0.82), rgba(12, 20, 32, 0.66));
+  border-color: rgba(255, 255, 255, 0.18);
+  will-change: transform;
 }
 .dc-stage .design-card img { pointer-events: none; -webkit-user-drag: none; user-select: none; }
 .dc-stage .design-card * { user-select: none; -webkit-user-drag: none; }
@@ -1360,6 +1408,8 @@ body::after {
   .dc-stage { --card-w: min(250px, 72vw); --card-h: 333px; height: calc(var(--card-h) + 70px); }
   /* cheaper paint on phones: skip heavy blur/filter mid-drag */
   .dc-stage .design-card { filter: none !important; }
+  .dc-stage .design-caption,
+  .dc-stage .design-chip { transform: none !important; }
   .dc-stage .glass-design-card { box-shadow: 0 16px 32px -18px rgba(0, 0, 0, 0.5); }
   .glass-design-card .design-img-wrap { height: 300px; }
   .glass-design-card .design-name { font-size: 0.9rem; }

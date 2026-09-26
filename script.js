@@ -390,6 +390,34 @@
     // blur/grayscale look great on desktop but cost paint time on phones
     const FX = !isMobile && !reducedMotion;
 
+    // Per-card parallax targets: the caption + chip drift as the card
+    // orbits, so the text reads like a floating layer above the face. Uses
+    // only the cos JS already computed — no extra layout reads — and the
+    // same write-guard cache as the card styles. Desktop (FX) only.
+    const parallax = FX ? cards.map(c => ({
+      cap: c.querySelector('.design-caption'),
+      chip: c.querySelector('.design-chip')
+    })) : null;
+    const updateParallax = (c, k) => {
+      const p = parallax && parallax[k];
+      if (!p || (!p.cap && !p.chip)) return;
+      const cos = c._dcCos || 0;
+      // off near edge-on AND at the front slot: at cos≈1 the shift is zero,
+      // and writing translate3d(0,0,0) there would block the hover lift
+      const on = c._dcVis && Math.abs(cos) > 0.12 && Math.abs(cos) < 0.98;
+      if (!on) {
+        if (p._capOn && p.cap) { p.cap.style.transform = ''; p._capTf = ''; p._capOn = false; }
+        if (p._chipOn && p.chip) { p.chip.style.transform = ''; p._chipTf = ''; p._chipOn = false; }
+        return;
+      }
+      const dir = (c._dcRelNum || 0) >= 0 ? 1 : -1;
+      const shift = Math.max(0, 1 - Math.abs(cos)) * 14 * dir;
+      const capTf = 'translate3d(' + shift.toFixed(2) + 'px,0,0)';
+      const chipTf = 'translate3d(' + (shift * 0.5).toFixed(2) + 'px,' + (-shift * 0.4).toFixed(2) + 'px,0) rotate(' + (dir * shift * 0.6).toFixed(2) + 'deg)';
+      if (p.cap && p._capTf !== capTf) { p.cap.style.transform = capTf; p._capTf = capTf; p._capOn = true; }
+      if (p.chip && p._chipTf !== chipTf) { p.chip.style.transform = chipTf; p._chipTf = chipTf; p._chipOn = true; }
+    };
+
     function place() {
       cards.forEach((c, k) => {
         let rel = mod(k - index, N);
@@ -405,13 +433,18 @@
         // phones: skip all work for cards the user can no longer see —
         // hiding them once is enough, they stay parked while off-ring
         if (!visible && c._dcHidden) return;
-        c.setAttribute('data-rel', String(Math.max(-3, Math.min(3, Math.round(t)))));
-        c.style.zIndex = String(Math.round(200 + cos * 100)); // front on top
-        c.style.visibility = visible ? '' : 'hidden';
+        // cache per-frame values for the caption/chip parallax pass
+        // (NOT _dcVis: that cache is consumed by the visibility guard below)
+        c._dcCos = cos; c._dcRelNum = t;
         const op = visible ? Math.max(0, Math.min(1, (cos + 0.35) / 0.85)) : 0;
-        c.style.opacity = op.toFixed(3);
         const away = Math.max(0, 1 - cos); // 0 front → 1 edge-on
-        const filt = FX && visible && away > 0.02 ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * 2.5).toFixed(1) + 'px)' : '';
+        // during an active drag the blur ramp is softened: a repaint with a
+        // big filter delta is the #1 source of mid-drag stutter — it eases
+        // back to full depth on release (endDrag -> goTo -> update)
+        const blurMax = dragging ? 1.6 : 2.5;
+        const filt = FX && visible && away > 0.02
+          ? 'grayscale(' + Math.min(1, away * 1.2).toFixed(2) + ') blur(' + (away * blurMax).toFixed(1) + 'px)'
+          : '';
         // touch tap-glow lifts the card (composes with the ring transform)
         const lift = c.classList.contains('touch-glow') ? ' translateY(-14px)' : '';
         // cylinder transform: step back, rotate to the slot, push out to the
@@ -421,14 +454,20 @@
           ' translateZ(' + (-RADIUS).toFixed(1) + 'px)' +
           ' rotateY(' + (angle * 180 / Math.PI).toFixed(2) + 'deg)' +
           ' translateZ(' + RADIUS.toFixed(1) + 'px)' + lift;
-        // phones: touch the DOM only when a value actually changed — repeated
-        // identical writes are what made the drag feel laggy there
+        // WRITE-GUARD: touch the DOM only when a value actually changed.
+        // Every setAttribute/style write dirties style+paint for the whole
+        // card subtree — repeated redundant writes are exactly what made
+        // the drag feel janky (both desktop and phones).
+        const relTag = String(Math.max(-3, Math.min(3, Math.round(t))));
+        if (c._dcRel !== relTag) { c.setAttribute('data-rel', relTag); c._dcRel = relTag; }
         if (c._dcTf !== tf) { c.style.transform = tf; c._dcTf = tf; }
         if (c._dcOp !== op) { c.style.opacity = op.toFixed(3); c._dcOp = op; }
         if (c._dcZ !== cos) { c.style.zIndex = String(Math.round(200 + cos * 100)); c._dcZ = cos; }
         if (c._dcF !== filt) { c.style.filter = filt; c._dcF = filt; }
         if (c._dcVis !== visible) { c.style.visibility = visible ? '' : 'hidden'; c._dcVis = visible; }
         c._dcHidden = !visible;
+        // caption + chip drift while the card orbits (desktop only)
+        updateParallax(c, k);
       });
       dots.forEach((d, k) => d.classList.toggle('active', k === mod(index, N)));
     }
@@ -491,6 +530,8 @@
       if (dragOffset <= -threshold) goTo(index + 1);
       else if (dragOffset >= threshold) goTo(index - 1);
       else goTo(index); // snap back
+      // blur ramps back to full depth now that the drag is over
+      schedulePlace();
     };
     track.addEventListener('pointerup', endDrag);
     track.addEventListener('pointercancel', endDrag);
